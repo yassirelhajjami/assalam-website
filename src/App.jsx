@@ -9,7 +9,7 @@ import Footer   from './components/Footer';
 import Store    from './components/Store';
 
 const App = () => {
-  const [lang, setLang]         = useState('fr');
+  const [lang, setLang]         = useState('ar');
   const [scrolled, setScrolled] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [page, setPage]         = useState('home');
