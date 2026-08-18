@@ -9,9 +9,10 @@ const LANGS = [
   { code: 'en', label: 'EN' },
 ];
 
-export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, setDarkMode, page, setPage }) {
+export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, setDarkMode, page, setPage, cart }) {
   const [open, setOpen] = useState(false);
   const t = translations[lang].nav;
+  const totalItems = cart ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
   const goHome = (id) => {
     if (page !== 'home') setPage('home');
@@ -72,7 +73,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, se
             {/* Store link */}
             <button
               onClick={goStore}
-              className={`flex items-center gap-1.5 text-sm font-semibold transition-colors px-3 py-1.5 rounded-full border ${
+              className={`flex items-center gap-1.5 text-sm font-semibold transition-all px-3.5 py-1.5 rounded-full border relative ${
                 page === 'store'
                   ? 'bg-gold-500 text-white border-gold-500'
                   : `border-current hover:bg-gold-500 hover:text-white hover:border-gold-500 ${textCol}`
@@ -80,6 +81,11 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, se
             >
               <ShoppingBag className="w-4 h-4" />
               {t.store}
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-sm">
+                  {totalItems}
+                </span>
+              )}
             </button>
           </nav>
 
@@ -170,10 +176,17 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, se
             ))}
             <button
               onClick={goStore}
-              className="flex items-center gap-2 w-full py-3 px-2 text-gold-500 font-semibold"
+              className="flex items-center justify-between w-full py-3 px-2 text-gold-500 font-semibold"
             >
-              <ShoppingBag className="w-4 h-4" />
-              {t.store}
+              <span className="flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4" />
+                {t.store}
+              </span>
+              {totalItems > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </button>
             <a
               href="tel:0699165490"

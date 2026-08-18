@@ -14,6 +14,44 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [page, setPage]         = useState('home');
 
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('assalam_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('assalam_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = (productId) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === productId);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { id: productId, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (productId) => {
+    setCart((prev) => prev.filter((item) => item.id !== productId));
+  };
+
+  const updateCartQuantity = (productId, qty) => {
+    if (qty < 1) return;
+    setCart((prev) =>
+      prev.map((item) => (item.id === productId ? { ...item, quantity: qty } : item))
+    );
+  };
+
+  const clearCart = () => setCart([]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
@@ -35,10 +73,20 @@ const App = () => {
         scrolled={scrolled} scrollTo={scrollTo}
         darkMode={darkMode} setDarkMode={setDarkMode}
         page={page} setPage={setPage}
+        cart={cart}
       />
 
       {page === 'store' ? (
-        <Store lang={lang} darkMode={darkMode} setPage={setPage} />
+        <Store
+          lang={lang}
+          darkMode={darkMode}
+          setPage={setPage}
+          cart={cart}
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+          updateCartQuantity={updateCartQuantity}
+          clearCart={clearCart}
+        />
       ) : (
         <>
           <Hero     lang={lang} scrollTo={scrollTo} />
