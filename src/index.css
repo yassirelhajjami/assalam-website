@@ -3,12 +3,93 @@
 @tailwind utilities;
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  body { @apply antialiased overflow-x-hidden; }
+  html { scroll-behavior: smooth; direction: rtl; }
+  body {
+    @apply antialiased overflow-x-hidden bg-gray-50 text-gray-800;
+    font-family: 'Cairo', system-ui, sans-serif;
+  }
   * { box-sizing: border-box; }
 }
 
-::-webkit-scrollbar { width: 6px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #1B3252; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #1d7063; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #C8A84B; }
+
+@layer components {
+  /* Product card hover effect */
+  .product-card {
+    @apply bg-white rounded-xl overflow-hidden transition-all duration-300 relative;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+  .product-card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    transform: translateY(-3px);
+  }
+  .product-card .card-actions {
+    @apply absolute top-3 right-3 flex flex-col gap-1.5 opacity-0 transition-opacity duration-200;
+  }
+  .product-card:hover .card-actions {
+    @apply opacity-100;
+  }
+  .action-btn {
+    @apply w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-colors duration-150;
+  }
+
+  /* Category icon circle */
+  .cat-icon-circle {
+    @apply w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2 transition-all duration-200 overflow-hidden;
+  }
+  .cat-icon-circle:hover {
+    @apply bg-teal-50;
+    box-shadow: 0 0 0 2px #1d7063;
+  }
+
+  /* Section heading with gold underline */
+  .section-title {
+    @apply text-2xl font-bold text-gray-800 relative inline-block;
+  }
+  .section-title::after {
+    content: '';
+    @apply absolute -bottom-1.5 right-0 h-0.5 bg-gold-500;
+    width: 40px;
+  }
+
+  /* Teal pill badge */
+  .badge-teal {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-700;
+  }
+
+  /* Gold badge */
+  .badge-gold {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gold-100 text-gold-700;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply px-6 py-2.5 bg-teal-700 hover:bg-teal-800 text-white font-semibold rounded-lg transition-colors duration-150;
+  }
+
+  /* Outlined button */
+  .btn-outline {
+    @apply px-6 py-2.5 border-2 border-teal-700 text-teal-700 hover:bg-teal-700 hover:text-white font-semibold rounded-lg transition-all duration-150;
+  }
+}
+
+/* Promo banner shimmer */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Smooth banner transitions */
+.banner-slide {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+

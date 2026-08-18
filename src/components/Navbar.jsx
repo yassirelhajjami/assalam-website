@@ -1,17 +1,53 @@
 import { useState } from 'react';
-import { Menu, X, Phone, Moon, Sun, ShoppingBag } from 'lucide-react';
+import {
+  ShoppingBag, Search, Menu, X, Phone, Heart,
+  ChevronDown, Globe, User
+} from 'lucide-react';
 import { translations } from '../data/translations';
 import logoImg from '../../pic1.png';
 
 const LANGS = [
-  { code: 'fr', label: 'FR' },
   { code: 'ar', label: 'ع' },
+  { code: 'fr', label: 'FR' },
   { code: 'en', label: 'EN' },
 ];
 
-export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, setDarkMode, page, setPage, cart }) {
+const getCategories = (lang) => {
+  const cats = {
+    ar: [
+      { key: 'all',       label: 'جميع التصنيفات' },
+      { key: 'livres',    label: 'كتب ومناهج' },
+      { key: 'papeterie', label: 'أدوات قرطاسية ومدرسية' },
+      { key: 'bureau',    label: 'أثاث مكتبي' },
+      { key: 'print',     label: 'طباعة وتصوير' },
+      { key: 'admin',     label: 'خدمات إدارية' },
+    ],
+    fr: [
+      { key: 'all',       label: 'Toutes Catégories' },
+      { key: 'livres',    label: 'Livres & Manuels' },
+      { key: 'papeterie', label: 'Papeterie & Scolaire' },
+      { key: 'bureau',    label: 'Mobilier de Bureau' },
+      { key: 'print',     label: 'Impression & Copie' },
+      { key: 'admin',     label: 'Services Admin' },
+    ],
+    en: [
+      { key: 'all',       label: 'All Categories' },
+      { key: 'livres',    label: 'Books & Textbooks' },
+      { key: 'papeterie', label: 'Stationery & School' },
+      { key: 'bureau',    label: 'Office Furniture' },
+      { key: 'print',     label: 'Printing & Copying' },
+      { key: 'admin',     label: 'Admin Services' },
+    ],
+  };
+  return cats[lang] || cats.ar;
+};
+
+export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPage, cart }) {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const t = translations[lang].nav;
+  const categories = getCategories(lang);
   const totalItems = cart ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
   const goHome = (id) => {
@@ -20,177 +56,151 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, darkMode, se
     setOpen(false);
   };
 
-  const goStore = () => { setPage('store'); setOpen(false); };
-
-  // Style helpers
-  const solidBg = darkMode ? 'bg-gray-900 shadow-lg' : 'bg-white shadow-lg';
-  const navBg   = scrolled || page === 'store' ? solidBg : 'bg-transparent';
-  const textCol  = scrolled || page === 'store'
-    ? darkMode ? 'text-gray-100' : 'text-navy-600'
-    : 'text-white';
-  const subCol   = scrolled || page === 'store'
-    ? 'text-gold-500'
-    : 'text-gold-300';
-  const langBg   = scrolled || page === 'store'
-    ? darkMode ? 'bg-gray-700' : 'bg-gray-100'
-    : 'bg-white/10 backdrop-blur-sm';
-
-  const NAV_LINKS = [
-    { key: 'home',     action: () => goHome('hero') },
-    { key: 'services', action: () => goHome('services') },
-    { key: 'about',    action: () => goHome('about') },
-    { key: 'gallery',  action: () => goHome('gallery') },
-    { key: 'contact',  action: () => goHome('contact') },
-  ];
+  const goStore = () => { setPage('store'); setOpen(false); window.scrollTo(0,0); };
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${navBg}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <header className="fixed inset-x-0 top-0 z-50 bg-white" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.1)' }}>
+      {/* ── Top Utility Bar ── */}
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
-          {/* Logo */}
-          <button onClick={() => goHome('hero')} className="flex items-center gap-3 shrink-0">
-            <img src={logoImg} alt="Assalam" className="h-12 w-auto object-contain" />
-            <div className="hidden sm:block text-left">
-              <p className={`font-bold text-base leading-tight ${textCol}`}>
-                {lang === 'ar' ? 'مكتبة السلام' : 'Librairie Assalam'}
-              </p>
-              <p className={`text-xs ${subCol}`}>Tanger, Maroc</p>
-            </div>
-          </button>
-
-          {/* Desktop nav links */}
-          <nav className="hidden md:flex items-center gap-6">
-            {NAV_LINKS.map(({ key, action }) => (
-              <button
-                key={key}
-                onClick={action}
-                className={`text-sm font-medium transition-colors hover:text-gold-500 ${textCol}`}
-              >
-                {t[key]}
-              </button>
-            ))}
-            {/* Store link */}
+          {/* LEFT: Cart + Wishlist + User + Language */}
+          <div className="flex items-center gap-1">
+            {/* Cart */}
             <button
+              id="nav-cart-btn"
               onClick={goStore}
-              className={`flex items-center gap-1.5 text-sm font-semibold transition-all px-3.5 py-1.5 rounded-full border relative ${
-                page === 'store'
-                  ? 'bg-gold-500 text-white border-gold-500'
-                  : `border-current hover:bg-gold-500 hover:text-white hover:border-gold-500 ${textCol}`
-              }`}
+              className="relative flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
+              title={t.store}
             >
-              <ShoppingBag className="w-4 h-4" />
-              {t.store}
+              <ShoppingBag className="w-5 h-5 text-gray-600" />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-sm">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-teal-700 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-0.5">
                   {totalItems}
                 </span>
               )}
             </button>
-          </nav>
 
-          {/* Desktop right: lang + dark toggle + call */}
-          <div className="hidden md:flex items-center gap-2">
-            {/* Language switcher */}
-            <div className={`flex items-center rounded-full p-1 gap-0.5 ${langBg}`}>
+            {/* Wishlist */}
+            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors">
+              <Heart className="w-5 h-5 text-gray-600" />
+            </button>
+
+            {/* User */}
+            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors">
+              <User className="w-5 h-5 text-gray-600" />
+            </button>
+
+            {/* Language */}
+            <div className="flex items-center gap-0.5 ml-1">
               {LANGS.map(({ code, label }) => (
                 <button
                   key={code}
                   onClick={() => setLang(code)}
-                  className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
+                  className={`px-2.5 py-1 text-xs font-bold rounded-full transition-all ${
                     lang === code
-                      ? 'bg-gold-500 text-white'
-                      : `hover:text-gold-400 ${scrolled || page === 'store' ? (darkMode ? 'text-gray-300' : 'text-gray-600') : 'text-white/80'}`
+                      ? 'bg-teal-700 text-white'
+                      : 'text-gray-500 hover:text-teal-700'
                   }`}
                 >
                   {label}
                 </button>
               ))}
             </div>
-
-            {/* Dark mode toggle */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
-                scrolled || page === 'store'
-                  ? darkMode ? 'bg-gray-700 text-gold-400 hover:bg-gray-600' : 'bg-gray-100 text-navy-600 hover:bg-gray-200'
-                  : 'bg-white/10 text-white hover:bg-white/20'
-              }`}
-              title={darkMode ? 'Mode clair' : 'Mode sombre'}
-            >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-
-            {/* Phone CTA */}
-            <a
-              href="tel:0699165490"
-              className="flex items-center gap-2 px-4 py-2 bg-gold-500 hover:bg-gold-600 text-white rounded-full text-sm font-semibold transition-all"
-            >
-              <Phone className="w-4 h-4" />
-              06 99 16 54 90
-            </a>
           </div>
 
-          {/* Mobile: lang + dark toggle + hamburger */}
-          <div className="flex md:hidden items-center gap-2">
-            <div className={`flex items-center rounded-full p-1 gap-0.5 ${langBg}`}>
-              {LANGS.map(({ code, label }) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
-                  className={`px-2 py-0.5 text-xs font-semibold rounded-full transition-all ${
-                    lang === code ? 'bg-gold-500 text-white' : 'text-white/80 hover:text-gold-400'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+          {/* CENTER: Logo */}
+          <button
+            id="nav-logo-btn"
+            onClick={() => goHome('hero')}
+            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center"
+          >
+            <img src={logoImg} alt="مكتبة وراقة السلام" className="h-10 w-auto object-contain" />
+          </button>
+
+          {/* RIGHT: Search + Hamburger */}
+          <div className="flex items-center gap-1">
             <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white"
+              id="nav-search-btn"
+              onClick={() => setSearchOpen(s => !s)}
+              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
             >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              <Search className="w-5 h-5 text-gray-600" />
             </button>
-            <button onClick={() => setOpen(!open)} className={textCol}>
-              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <button
+              id="nav-menu-btn"
+              onClick={() => setOpen(o => !o)}
+              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              {open ? <X className="w-5 h-5 text-gray-600" /> : <Menu className="w-5 h-5 text-gray-600" />}
             </button>
           </div>
         </div>
+
+        {/* Search Bar (expands on click) */}
+        {searchOpen && (
+          <div className="border-t border-gray-100 px-4 py-2.5 bg-white animate-fade-in">
+            <div className="max-w-2xl mx-auto relative">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder={lang === 'ar' ? 'ابحث عن منتج...' : lang === 'fr' ? 'Rechercher un produit...' : 'Search products...'}
+                className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 bg-gray-50"
+                dir="rtl"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Mobile drawer */}
+      {/* ── Second Row: Category Navigation ── */}
+      <nav className="hidden md:flex items-center justify-center h-11 bg-white border-b border-gray-100 overflow-x-auto">
+        <div className="flex items-center gap-0">
+          {categories.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => {
+                if (key === 'admin') goHome('services');
+                else { goStore(); }
+              }}
+              className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors whitespace-nowrap relative group"
+            >
+              {label}
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
+            </button>
+          ))}
+          <a
+            href="tel:0699165490"
+            className="mr-4 flex items-center gap-1.5 px-4 py-1.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-full transition-colors whitespace-nowrap"
+          >
+            <Phone className="w-3.5 h-3.5" />
+            06 99 16 54 90
+          </a>
+        </div>
+      </nav>
+
+      {/* ── Mobile Drawer ── */}
       {open && (
-        <div className={`md:hidden border-t shadow-xl ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-100'}`}>
-          <div className="px-4 py-5 space-y-1">
-            {NAV_LINKS.map(({ key, action }) => (
+        <div className="md:hidden bg-white border-t border-gray-100 shadow-xl animate-slide-up">
+          <div className="px-4 py-3 space-y-0.5">
+            {categories.map(({ key, label }) => (
               <button
                 key={key}
-                onClick={action}
-                className={`block w-full text-left py-3 px-2 font-medium border-b last:border-0 transition-colors hover:text-gold-500 ${
-                  darkMode ? 'text-gray-200 border-gray-700' : 'text-gray-700 border-gray-50'
-                }`}
+                onClick={() => {
+                  if (key === 'admin') goHome('services');
+                  else goStore();
+                  setOpen(false);
+                }}
+                className="flex items-center w-full py-3 px-2 text-right font-semibold text-gray-700 border-b border-gray-50 hover:text-teal-700 hover:bg-teal-50/50 rounded-lg transition-colors text-sm"
               >
-                {t[key]}
+                {label}
               </button>
             ))}
-            <button
-              onClick={goStore}
-              className="flex items-center justify-between w-full py-3 px-2 text-gold-500 font-semibold"
-            >
-              <span className="flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4" />
-                {t.store}
-              </span>
-              {totalItems > 0 && (
-                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                  {totalItems}
-                </span>
-              )}
-            </button>
             <a
               href="tel:0699165490"
-              className="flex items-center justify-center gap-2 w-full py-3 mt-2 bg-gold-500 text-white rounded-full font-semibold"
+              className="flex items-center justify-center gap-2 w-full py-3 mt-2 bg-teal-700 text-white rounded-xl font-semibold"
             >
               <Phone className="w-4 h-4" />
               06 99 16 54 90

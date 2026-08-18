@@ -1,77 +1,87 @@
-import { translations } from '../data/translations';
-import ad1  from '../images/ourads/ad1.jpeg';
-import ad2  from '../images/ourads/ad2.jpeg';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import ad3  from '../images/ourads/ad3.jpeg';
 import ad4  from '../images/ourads/ad4.jpeg';
-import ad5  from '../images/ourads/ad5.jpeg';
-import ad6  from '../images/ourads/ad6.jpeg';
-import ad7  from '../images/ourads/ad7.jpeg';
 import ad8  from '../images/ourads/ad8.jpeg';
 import ad9  from '../images/ourads/ad9.jpeg';
+import ad10 from '../images/ourads/ad10.jpeg';
+import ad11 from '../images/ourads/ad11.jpeg';
 
-const IMAGES = [ad4, ad8, ad9, ad1, ad2, ad7, ad3, ad5, ad6];
+const PROMO_BANNERS = [
+  { img: ad3,  label: { ar: 'أدوات مدرسية',    fr: 'Fournitures Scolaires', en: 'School Supplies' },   cta: { ar: 'تسوق الآن', fr: 'Voir plus', en: 'Shop now' } },
+  { img: ad4,  label: { ar: 'أثاث مكتبي',      fr: 'Mobilier de Bureau',   en: 'Office Furniture' },   cta: { ar: 'تسوق الآن', fr: 'Voir plus', en: 'Shop now' } },
+  { img: ad8,  label: { ar: 'خدمات الطباعة',   fr: 'Services Impression',  en: 'Printing Services' },  cta: { ar: 'اعرف أكثر', fr: 'En savoir +', en: 'Learn more' } },
+];
 
-export default function Gallery({ lang, darkMode }) {
-  const t     = translations[lang].gallery;
-  const isRTL = lang === 'ar';
+const MINI_ADS = [ad9, ad10, ad11];
+
+export default function Gallery({ lang, setPage }) {
+  const headings = {
+    ar: 'معرض أعمالنا وعروضنا',
+    fr: 'Notre Galerie & Promotions',
+    en: 'Our Gallery & Offers',
+  };
 
   return (
-    <section id="gallery" className={`py-24 transition-colors ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="gallery" className="py-14 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-        <div className={`mb-12 ${isRTL ? 'text-right' : 'text-center'}`}>
-          <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'justify-end' : 'justify-center'}`}>
-            <div className="w-8 h-px bg-gold-500" />
-            <span className="text-gold-500 font-semibold text-sm uppercase tracking-widest">
-              {lang === 'ar' ? 'عروضنا' : 'Nos Offres'}
-            </span>
-            <div className="w-8 h-px bg-gold-500" />
-          </div>
-          <h2 className={`text-4xl sm:text-5xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-navy-600'}`}
-              style={{ fontFamily: 'Playfair Display, serif' }}>
-            {t.title}
-          </h2>
-          <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t.subtitle}</p>
+        {/* Heading */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="h-px flex-1 bg-gray-200" />
+          <h2 className="section-title whitespace-nowrap">{headings[lang]}</h2>
+          <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {IMAGES.map((src, i) => (
+        {/* Large promo banners - 3-column grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          {PROMO_BANNERS.map(({ img, label, cta }, idx) => (
             <div
-              key={i}
-              className={`relative overflow-hidden rounded-2xl group cursor-pointer ${
-                i === 0 ? 'row-span-2 col-span-1' : ''
-              } ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}
+              key={idx}
+              className="relative rounded-2xl overflow-hidden group cursor-pointer"
+              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}
+              onClick={() => setPage('store')}
             >
               <img
-                src={src}
-                alt={`Assalam Services — ${i + 1}`}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                style={{ minHeight: i === 0 ? '480px' : '220px', maxHeight: i === 0 ? '480px' : '220px' }}
+                src={img}
+                alt={label[lang]}
+                className="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-navy-900/0 group-hover:bg-navy-900/30 transition-all duration-300 flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-gold-500/0 group-hover:bg-gold-500 flex items-center justify-center transition-all duration-300 scale-0 group-hover:scale-100">
-                  <span className="text-white text-lg font-bold">+</span>
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 group-hover:from-black/70" />
+              <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
+                <div>
+                  <p className="text-white font-bold text-lg leading-tight">{label[lang]}</p>
+                </div>
+                <div className="w-9 h-9 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition-all group-hover:bg-teal-700 group-hover:text-white">
+                  {lang === 'ar' ? (
+                    <ArrowLeft className="w-4 h-4 text-white" />
+                  ) : (
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  )}
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <a
-            href="https://www.instagram.com/assalam.services"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-flex items-center gap-2 px-8 py-3 border-2 rounded-full font-semibold transition-all duration-300 ${
-              darkMode
-                ? 'border-gold-500 text-gold-400 hover:bg-gold-500 hover:text-white'
-                : 'border-navy-600 text-navy-600 hover:bg-navy-600 hover:text-white'
-            }`}
-          >
-            {lang === 'ar' ? 'شاهد المزيد على إنستغرام' : lang === 'fr' ? 'Voir plus sur Instagram' : 'See more on Instagram'}
-            <span>→</span>
-          </a>
+        {/* Mini ads row */}
+        <div className="grid grid-cols-3 gap-4">
+          {MINI_ADS.map((img, idx) => (
+            <div
+              key={idx}
+              className="rounded-xl overflow-hidden cursor-pointer group"
+              style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.08)' }}
+              onClick={() => setPage('store')}
+            >
+              <img
+                src={img}
+                alt={`Promotion ${idx + 1}`}
+                className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   );

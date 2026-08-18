@@ -2,60 +2,89 @@ import { CheckCircle } from 'lucide-react';
 import { translations } from '../data/translations';
 import pic2 from '../../pic2.jpeg';
 
-export default function About({ lang, darkMode }) {
-  const t     = translations[lang].about;
-  const isRTL = lang === 'ar';
+export default function About({ lang }) {
+  const t = translations[lang].about;
+
+  const stats = [
+    { value: t.stat1?.number || '10+', label: t.stat1?.label || '' },
+    { value: t.stat2?.number || '4.7★', label: t.stat2?.label || '' },
+    { value: t.stat3?.number || '67', label: t.stat3?.label || '' },
+  ];
+
+  const features = [t.feature1, t.feature2, t.feature3, t.feature4].filter(Boolean);
 
   return (
-    <section id="about" className={`py-24 transition-colors ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section id="about" className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          {/* Image */}
-          <div className={`relative ${isRTL ? 'lg:order-2' : 'lg:order-1'}`}>
-            <div className={`absolute -bottom-6 -right-6 w-48 h-48 rounded-3xl -z-10 ${darkMode ? 'bg-gray-700' : 'bg-gold-50'}`} />
-            <div className={`absolute -top-6 -left-6 w-32 h-32 rounded-3xl -z-10 ${darkMode ? 'bg-gray-700' : 'bg-navy-50'}`} />
+        {/* Section heading */}
+        <div className="flex items-center gap-4 mb-10">
+          <div className="h-px flex-1 bg-gray-100" />
+          <h2 className="section-title whitespace-nowrap">
+            {lang === 'ar' ? 'من نحن' : lang === 'fr' ? 'À propos' : 'About Us'}
+          </h2>
+          <div className="h-px flex-1 bg-gray-100" />
+        </div>
 
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <img src={pic2} alt="Librairie Assalam" className="w-full h-96 lg:h-[520px] object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-6">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  {[t.stat1, t.stat2, t.stat3].map((s, i) => (
-                    <div key={i}>
-                      <div className="text-2xl font-bold text-gold-400" style={{ fontFamily: 'Playfair Display, serif' }}>{s.number}</div>
-                      <div className="text-xs text-white/75 mt-1 leading-snug">{s.label}</div>
-                    </div>
-                  ))}
-                </div>
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* Image with stats overlay */}
+          <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.10)' }}>
+            <img
+              src={pic2}
+              alt="Librairie Assalam"
+              className="w-full h-80 lg:h-[420px] object-cover"
+            />
+            {/* Stats overlay */}
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                {stats.map(({ value, label }) => (
+                  <div key={value}>
+                    <div className="text-2xl font-bold text-white">{value}</div>
+                    <div className="text-xs text-white/75 mt-0.5 leading-tight">{label}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Text */}
-          <div className={`${isRTL ? 'text-right lg:order-1' : 'lg:order-2'}`}>
-            <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'justify-end' : ''}`}>
-              <div className="w-8 h-px bg-gold-500" />
-              <span className="text-gold-500 font-semibold text-sm uppercase tracking-widest">{t.title}</span>
-            </div>
-            <h2 className={`text-4xl sm:text-5xl font-bold mb-6 leading-tight ${darkMode ? 'text-white' : 'text-navy-600'}`}
-                style={{ fontFamily: 'Playfair Display, serif' }}>
-              {t.subtitle}
-            </h2>
-            <p className={`text-lg leading-relaxed mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{t.description}</p>
-            <p className={`leading-relaxed mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t.description2}</p>
+          {/* Text content */}
+          <div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4 leading-snug">
+              {t.title}
+            </h3>
+            <p className="text-gray-600 leading-relaxed mb-2 text-sm">
+              {t.description}
+            </p>
+            {t.description2 && (
+              <p className="text-gray-600 leading-relaxed mb-6 text-sm">
+                {t.description2}
+              </p>
+            )}
 
-            <ul className="space-y-4">
-              {[t.feature1, t.feature2, t.feature3, t.feature4].map((f, i) => (
-                <li key={i} className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <CheckCircle className="w-5 h-5 text-gold-500 shrink-0 mt-0.5" />
-                  <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{f}</span>
-                </li>
+            {/* Feature checklist */}
+            <div className="space-y-3 mt-4">
+              {features.map((feat, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                  <span className="text-sm text-gray-700 font-medium">{feat}</span>
+                </div>
               ))}
-            </ul>
+            </div>
+
+            {/* Stats row (desktop dupe below text) */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-100">
+              {stats.map(({ value, label }) => (
+                <div key={value} className="text-center">
+                  <div className="text-2xl font-bold text-teal-700">{value}</div>
+                  <div className="text-xs text-gray-500 mt-1 leading-tight">{label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+

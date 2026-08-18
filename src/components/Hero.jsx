@@ -1,97 +1,225 @@
-import { Phone, MapPin, Star, ChevronDown, ArrowRight } from 'lucide-react';
-import { translations } from '../data/translations';
-import heroBg from '../images/portfolio-6.jpeg';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Truck, FileCheck, Star, MessageCircle } from 'lucide-react';
 
-export default function Hero({ lang, scrollTo }) {
-  const t    = translations[lang].hero;
-  const isRTL = lang === 'ar';
+// Import ourads promotional images
+import ad1 from '../images/ourads/ad1.jpeg';
+import ad2 from '../images/ourads/ad2.jpeg';
+import ad5 from '../images/ourads/ad5.jpeg';
+import ad6 from '../images/ourads/ad6.jpeg';
+import ad7 from '../images/ourads/ad7.jpeg';
+import ad8 from '../images/ourads/ad8.jpeg';
+
+const BANNERS = [ad1, ad2, ad5, ad6, ad7, ad8];
+
+const getInfoCards = (lang) => ({
+  ar: [
+    {
+      icon: Truck,
+      title: 'توصيل سريع داخل طنجة',
+      desc: 'نوصل طلبك في نفس اليوم',
+      color: '#1d7063',
+      bg: '#e6f4f1',
+    },
+    {
+      icon: FileCheck,
+      title: 'خدمات طباعة احترافية',
+      desc: 'طباعة رقمية وأوفست بجودة عالية',
+      color: '#C8A84B',
+      bg: '#fef9ec',
+    },
+    {
+      icon: MessageCircle,
+      title: 'اطلب عبر واتساب',
+      desc: 'تواصل معنا الآن وسنرد فورياً',
+      color: '#25D366',
+      bg: '#f0faf3',
+    },
+    {
+      icon: Star,
+      title: 'منتجات معتمدة وأصلية',
+      desc: 'أكثر من 500 منتج في متجرنا',
+      color: '#b04030',
+      bg: '#fef0ee',
+    },
+  ],
+  fr: [
+    {
+      icon: Truck,
+      title: 'Livraison rapide à Tanger',
+      desc: 'Votre commande livrée le jour même',
+      color: '#1d7063',
+      bg: '#e6f4f1',
+    },
+    {
+      icon: FileCheck,
+      title: 'Impression professionnelle',
+      desc: 'Numérique & offset haute qualité',
+      color: '#C8A84B',
+      bg: '#fef9ec',
+    },
+    {
+      icon: MessageCircle,
+      title: 'Commandez via WhatsApp',
+      desc: 'Contactez-nous maintenant',
+      color: '#25D366',
+      bg: '#f0faf3',
+    },
+    {
+      icon: Star,
+      title: 'Produits authentiques',
+      desc: 'Plus de 500 articles disponibles',
+      color: '#b04030',
+      bg: '#fef0ee',
+    },
+  ],
+  en: [
+    {
+      icon: Truck,
+      title: 'Fast Delivery in Tangier',
+      desc: 'Same-day delivery available',
+      color: '#1d7063',
+      bg: '#e6f4f1',
+    },
+    {
+      icon: FileCheck,
+      title: 'Professional Printing',
+      desc: 'Digital & offset high quality',
+      color: '#C8A84B',
+      bg: '#fef9ec',
+    },
+    {
+      icon: MessageCircle,
+      title: 'Order via WhatsApp',
+      desc: 'Contact us anytime',
+      color: '#25D366',
+      bg: '#f0faf3',
+    },
+    {
+      icon: Star,
+      title: 'Authentic Products',
+      desc: 'Over 500 items in our store',
+      color: '#b04030',
+      bg: '#fef0ee',
+    },
+  ],
+})[lang] || [];
+
+export default function Hero({ lang, scrollTo, setPage }) {
+  const [current, setCurrent] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const timerRef = useRef(null);
+  const infoCards = getInfoCards(lang);
+
+  const headings = {
+    ar: { main: 'وجهتك الأولى للمستلزمات المكتبية والمدرسية', sub: 'مكتبة وراقة السلام — طنجة' },
+    fr: { main: 'Votre destination pour la papeterie et fournitures', sub: 'Librairie Assalam — Tanger' },
+    en: { main: 'Your destination for stationery and office supplies', sub: 'Assalam Library — Tangier' },
+  };
+
+  const { main, sub } = headings[lang] || headings.ar;
+
+  const goTo = (idx) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setIsTransitioning(false);
+    }, 200);
+  };
+
+  const prev = () => goTo((current - 1 + BANNERS.length) % BANNERS.length);
+  const next = () => goTo((current + 1) % BANNERS.length);
+
+  useEffect(() => {
+    timerRef.current = setInterval(next, 4500);
+    return () => clearInterval(timerRef.current);
+  }, [current]);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+    <section id="hero" className="pt-[90px] md:pt-[100px]">
 
-      {/* Background */}
-      <div className="absolute inset-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/85" />
-      </div>
+      {/* ── Main Banner Carousel ── */}
+      <div className="relative w-full bg-gray-100 overflow-hidden" style={{ maxHeight: '480px' }}>
+        {/* Slides */}
+        <div
+          className="w-full transition-opacity duration-300"
+          style={{ opacity: isTransitioning ? 0 : 1 }}
+        >
+          <img
+            src={BANNERS[current]}
+            alt={`Banner ${current + 1}`}
+            className="w-full object-cover object-center"
+            style={{ maxHeight: '480px', width: '100%' }}
+          />
+        </div>
 
-      {/* Gold bottom border accent */}
-      <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+        {/* Gradient overlay at bottom for text */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)' }}
+        />
 
-      {/* Decorative blobs */}
-      <div className="absolute top-32 right-20 w-80 h-80 bg-gold-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-32 left-10 w-64 h-64 bg-navy-400/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-24">
-        <div className={`max-w-3xl ${isRTL ? 'mr-0 ml-auto text-right' : ''}`}>
-
-          {/* Arabic calligraphy badge */}
-          <div className="inline-block mb-5">
-            <span
-              className="font-arabic text-gold-400 text-2xl font-bold tracking-wide"
-              style={{ fontFamily: 'Cairo, sans-serif' }}
-            >
-              مكتبة وراقة السلام
-            </span>
-          </div>
-
-          {/* Main headline */}
-          <h1
-            className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-5"
-            style={{ fontFamily: 'Playfair Display, serif' }}
-          >
-            {t.title}
-            <br />
-            <span className="text-gold-400">{t.subtitle}</span>
-          </h1>
-
-          {/* Description */}
-          <p className="text-lg sm:text-xl text-white/75 mb-9 max-w-2xl leading-relaxed">
-            {t.description}
+        {/* Tagline overlay */}
+        <div className="absolute bottom-6 inset-x-0 flex flex-col items-center gap-1 pointer-events-none">
+          <p className="text-white text-xl md:text-3xl font-bold text-center drop-shadow-lg px-4">
+            {main}
           </p>
+          <p className="text-white/80 text-sm font-medium">{sub}</p>
+        </div>
 
-          {/* CTA buttons */}
-          <div className={`flex flex-wrap gap-4 mb-12 ${isRTL ? 'justify-end' : ''}`}>
+        {/* Prev/Next arrows */}
+        <button
+          onClick={prev}
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-700" />
+        </button>
+        <button
+          onClick={next}
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700" />
+        </button>
+
+        {/* Dots */}
+        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {BANNERS.map((_, idx) => (
             <button
-              onClick={() => scrollTo('services')}
-              className="group flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-600 text-white font-semibold rounded-full transition-all hover:shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-0.5"
-            >
-              {t.cta}
-              <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
-            </button>
-            <a
-              href="tel:0699165490"
-              className="flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full border border-white/30 transition-all backdrop-blur-sm"
-            >
-              <Phone className="w-5 h-5" />
-              {t.phone}
-            </a>
-          </div>
-
-          {/* Info badges */}
-          <div className={`flex flex-wrap gap-3 ${isRTL ? 'justify-end' : ''}`}>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm">
-              <Star className="w-4 h-4 text-gold-400 fill-gold-400" />
-              <span className="font-semibold text-gold-300">4.7</span>
-              <span className="text-white/60">— 67 avis Google</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm">
-              <MapPin className="w-4 h-4 text-gold-400" />
-              <span>Route Principale, Tanger</span>
-            </div>
-          </div>
+              key={idx}
+              onClick={() => goTo(idx)}
+              className={`rounded-full transition-all ${
+                idx === current
+                  ? 'w-5 h-2 bg-white'
+                  : 'w-2 h-2 bg-white/50 hover:bg-white/75'
+              }`}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Scroll down indicator */}
-      <button
-        onClick={() => scrollTo('services')}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/50 hover:text-gold-400 transition-colors"
-        aria-label="Scroll down"
-      >
-        <ChevronDown className="w-8 h-8" />
-      </button>
+      {/* ── Info Feature Cards ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
+          {infoCards.map(({ icon: Icon, title, desc, color, bg }) => (
+            <div
+              key={title}
+              className="flex items-center gap-3 p-3 rounded-xl bg-white"
+              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
+            >
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: bg }}
+              >
+                <Icon className="w-5 h-5" style={{ color }} strokeWidth={2} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-gray-800 leading-tight">{title}</p>
+                <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
