@@ -283,16 +283,16 @@ export default function Store({
   };
 
   return (
-    <div className="min-h-screen pt-[100px] pb-20 bg-gray-50" dir="rtl">
+    <div className="min-h-screen pt-[100px] pb-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-205" dir="rtl">
 
       {/* ── Breadcrumb / Page header ── */}
-      <div className="bg-white border-b border-gray-100 mb-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <button onClick={() => setPage('home')} className="hover:text-teal-700 transition-colors font-medium">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 mb-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <button onClick={() => setPage('home')} className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors font-medium">
             {c.back}
           </button>
           <span>/</span>
-          <span className="text-gray-800 font-semibold">{c.title}</span>
+          <span className="text-gray-800 dark:text-gray-200 font-semibold">{c.title}</span>
         </div>
       </div>
 
@@ -301,8 +301,8 @@ export default function Store({
         {/* ── Page Title + Cart Button ── */}
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">{c.title}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{c.subtitle}</p>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{c.title}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{c.subtitle}</p>
           </div>
           <button
             id="open-cart-drawer-btn"
@@ -329,7 +329,7 @@ export default function Store({
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
                   cat === key
                     ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-teal-400 hover:text-teal-700'
+                    : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-teal-400 hover:text-teal-700'
                 }`}
               >
                 {label}
@@ -355,8 +355,8 @@ export default function Store({
                   onClick={() => setSubcat(key)}
                   className={`px-4 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap transition-all ${
                     subcat === key
-                      ? 'bg-teal-50 border-teal-700 text-teal-800 font-bold'
-                      : 'bg-white border-gray-200 text-gray-600 hover:border-teal-400 hover:text-teal-700'
+                      ? 'bg-teal-50 dark:bg-teal-950/30 border-teal-700 text-teal-800 dark:text-teal-400 font-bold'
+                      : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-teal-400 hover:text-teal-700'
                   }`}
                   style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}
                 >
@@ -381,14 +381,14 @@ export default function Store({
         </div>
 
         {/* ── Contact CTA ── */}
-        <div className="bg-white rounded-2xl p-8 text-center border border-gray-100" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-          <div className="w-14 h-14 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ShoppingBag className="w-7 h-7 text-teal-700" />
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-800" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          <div className="w-14 h-14 bg-teal-50 dark:bg-teal-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShoppingBag className="w-7 h-7 text-teal-700 dark:text-teal-400" />
           </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             {lang === 'ar' ? 'اطلب الآن' : lang === 'fr' ? 'Passer une commande' : 'Place an Order'}
           </h2>
-          <p className="text-gray-500 mb-6 max-w-sm mx-auto text-sm">{c.contact}</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto text-sm">{c.contact}</p>
           <div className="flex flex-wrap gap-3 justify-center">
             <a
               href="https://wa.me/212699165490"
@@ -438,22 +438,22 @@ export default function Store({
 
       {/* ── Cart Drawer Panel ── */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm bg-white dark:bg-gray-900 shadow-2xl flex flex-col transition-transform duration-300 ease-out border-l border-gray-100 dark:border-gray-800 ${
           isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer Header */}
-        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-5 h-5 text-teal-700" />
-            <h2 className="text-lg font-bold text-gray-800">{tCart.title}</h2>
-            <span className="px-2 py-0.5 text-xs bg-teal-50 text-teal-700 font-bold rounded-full">
+            <ShoppingBag className="w-5 h-5 text-teal-700 dark:text-teal-400" />
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{tCart.title}</h2>
+            <span className="px-2 py-0.5 text-xs bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 font-bold rounded-full">
               {totalItems}
             </span>
           </div>
           <button
             onClick={() => setIsDrawerOpen(false)}
-            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500 dark:text-gray-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -462,34 +462,34 @@ export default function Store({
         {/* Drawer Items */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {cartItems.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center gap-3 text-gray-400 py-20">
-              <ShoppingBag className="w-14 h-14 text-gray-200" />
+            <div className="h-full flex flex-col items-center justify-center text-center gap-3 text-gray-400 dark:text-gray-600 py-20">
+              <ShoppingBag className="w-14 h-14 text-gray-200 dark:text-gray-800" />
               <p className="font-medium">{tCart.empty}</p>
             </div>
           ) : (
             cartItems.map(item => (
-              <div key={item.id} className="flex gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 relative">
+              <div key={item.id} className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800 relative">
                 <img
                   src={item.img}
                   alt={item.name}
-                  className="w-16 h-16 rounded-lg object-cover bg-white flex-shrink-0"
+                  className="w-16 h-16 rounded-lg object-cover bg-white dark:bg-gray-900 flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-sm text-gray-800 truncate mb-0.5">{item.name}</h4>
-                  <p className="text-xs text-teal-700 font-semibold mb-2">{item.price}</p>
+                  <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 truncate mb-0.5">{item.name}</h4>
+                  <p className="text-xs text-teal-700 dark:text-teal-400 font-semibold mb-2">{item.price}</p>
                   {/* Qty controls */}
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
-                      <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)} className="px-2 py-1 hover:bg-gray-50 text-gray-500 transition-colors">
+                    <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900">
+                      <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)} className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors">
                         <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="px-2.5 text-sm font-bold text-gray-800">{item.quantity}</span>
-                      <button onClick={() => addToCart(item.id)} className="px-2 py-1 hover:bg-gray-50 text-gray-500 transition-colors">
+                      <span className="px-2.5 text-sm font-bold text-gray-800 dark:text-gray-200">{item.quantity}</span>
+                      <button onClick={() => addToCart(item.id)} className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors">
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
                     {item.priceNum > 0 && (
-                      <span className="text-sm font-bold text-gray-700">
+                      <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
                         {item.priceNum * item.quantity} DH
                       </span>
                     )}
@@ -497,7 +497,7 @@ export default function Store({
                 </div>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="absolute top-2.5 left-2.5 p-1 text-gray-300 hover:text-red-500 transition-colors"
+                  className="absolute top-2.5 left-2.5 p-1 text-gray-300 dark:text-gray-600 hover:text-red-500 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -508,10 +508,10 @@ export default function Store({
 
         {/* Drawer Footer */}
         {cartItems.length > 0 && (
-          <div className="p-4 border-t border-gray-100 bg-gray-50/50 space-y-3">
+          <div className="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-500">{tCart.total}</span>
-              <span className="text-xl font-bold text-teal-700">{estimatedTotal} DH{hasOnDemand && '+'}</span>
+              <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">{tCart.total}</span>
+              <span className="text-xl font-bold text-teal-700 dark:text-teal-400">{estimatedTotal} DH{hasOnDemand && '+'}</span>
             </div>
             <button
               onClick={handleWhatsAppCheckout}

@@ -39,12 +39,12 @@ export default function CategoryIcons({ lang, onCategoryClick }) {
   const headings = { ar: 'أهم التصنيفات', fr: 'Catégories Principales', en: 'Top Categories' };
 
   return (
-    <section className="bg-white py-6 border-b border-gray-100">
+    <section className="bg-white dark:bg-gray-950 py-6 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section title */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-800">{headings[lang]}</h2>
-          <div className="h-px flex-1 mx-4 bg-gradient-to-l from-gray-200 to-transparent" />
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{headings[lang]}</h2>
+          <div className="h-px flex-1 mx-4 bg-gradient-to-l from-gray-200 dark:from-gray-800 to-transparent" />
         </div>
 
         {/* Horizontally scrollable icons */}
@@ -72,7 +72,7 @@ export default function CategoryIcons({ lang, onCategoryClick }) {
                   <Icon className="w-8 h-8" style={{ color }} strokeWidth={1.5} />
                 </div>
                 {/* Label */}
-                <span className="text-xs font-semibold text-gray-600 group-hover:text-teal-700 transition-colors text-center max-w-[72px] leading-tight">
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors text-center max-w-[72px] leading-tight">
                   {label}
                 </span>
               </button>

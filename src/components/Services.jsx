@@ -5,8 +5,8 @@ import { libraryServices, adminServices } from '../data/services';
 function ServiceCard({ icon: Icon, title, desc, color }) {
   return (
     <div
-      className="group bg-white rounded-2xl p-5 border border-gray-100 hover:border-teal-200 transition-all duration-300 hover:-translate-y-1 cursor-default"
-      style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+      className="group bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800/80 hover:border-teal-200 dark:hover:border-teal-900/60 transition-all duration-300 hover:-translate-y-1 cursor-default"
+      style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}
     >
       <div
         className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
@@ -14,8 +14,8 @@ function ServiceCard({ icon: Icon, title, desc, color }) {
       >
         <Icon className="w-6 h-6" style={{ color }} strokeWidth={1.8} />
       </div>
-      <h3 className="font-bold text-base text-gray-800 mb-1.5 leading-snug">{title}</h3>
-      <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+      <h3 className="font-bold text-base text-gray-800 dark:text-gray-100 mb-1.5 leading-snug">{title}</h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{desc}</p>
     </div>
   );
 }
@@ -35,14 +35,14 @@ export default function Services({ lang }) {
   }[lang];
 
   return (
-    <section id="services" className="py-14 bg-white">
+    <section id="services" className="py-14 bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Heading */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="h-px flex-1 bg-gray-100" />
+          <div className="h-px flex-1 bg-gray-100 dark:bg-gray-850" />
           <h2 className="section-title whitespace-nowrap">{t.title}</h2>
-          <div className="h-px flex-1 bg-gray-100" />
+          <div className="h-px flex-1 bg-gray-100 dark:bg-gray-850" />
         </div>
 
         {/* Tab switcher */}
@@ -54,7 +54,7 @@ export default function Services({ lang }) {
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border ${
                 tab === key
                   ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-teal-400 hover:text-teal-700'
+                  : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-teal-400 hover:text-teal-700'
               }`}
             >
               {tabLabels[key]}

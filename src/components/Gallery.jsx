@@ -22,14 +22,14 @@ export default function Gallery({ lang, setPage }) {
   };
 
   return (
-    <section id="gallery" className="py-14 bg-gray-50">
+    <section id="gallery" className="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Heading */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="h-px flex-1 bg-gray-200" />
+          <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
           <h2 className="section-title whitespace-nowrap">{headings[lang]}</h2>
-          <div className="h-px flex-1 bg-gray-200" />
+          <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
         </div>
 
         {/* Large promo banners - 3-column grid */}
@@ -37,8 +37,8 @@ export default function Gallery({ lang, setPage }) {
           {PROMO_BANNERS.map(({ img, label, cta }, idx) => (
             <div
               key={idx}
-              className="relative rounded-2xl overflow-hidden group cursor-pointer"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}
+              className="relative rounded-2xl overflow-hidden group cursor-pointer border border-transparent dark:border-gray-800"
+              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
               onClick={() => setPage('store')}
             >
               <img
@@ -69,8 +69,8 @@ export default function Gallery({ lang, setPage }) {
           {MINI_ADS.map((img, idx) => (
             <div
               key={idx}
-              className="rounded-xl overflow-hidden cursor-pointer group"
-              style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.08)' }}
+              className="rounded-xl overflow-hidden cursor-pointer group border border-transparent dark:border-gray-800"
+              style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.04)' }}
               onClick={() => setPage('store')}
             >
               <img

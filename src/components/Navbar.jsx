@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   ShoppingBag, Search, Menu, X, Phone, Heart,
-  ChevronDown, Globe, User
+  ChevronDown, Globe, User, Sun, Moon
 } from 'lucide-react';
 import { translations } from '../data/translations';
 import logoImg from '../../pic1.png';
@@ -42,7 +42,7 @@ const getCategories = (lang) => {
   return cats[lang] || cats.ar;
 };
 
-export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPage, cart, setStoreCat }) {
+export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPage, cart, setStoreCat, darkMode, setDarkMode }) {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,21 +64,21 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.1)' }}>
+    <header className="fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}>
       {/* ── Top Utility Bar ── */}
-      <div className="border-b border-gray-100">
+      <div className="border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
-          {/* LEFT: Cart + Wishlist + User + Language */}
+          {/* LEFT: Cart + Wishlist + User + Language + Theme Switcher */}
           <div className="flex items-center gap-1">
             {/* Cart */}
             <button
               id="nav-cart-btn"
-              onClick={goStore}
-              className="relative flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
+              onClick={() => goStore()}
+              className="relative flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
               title={t.store}
             >
-              <ShoppingBag className="w-5 h-5 text-gray-600" />
+              <ShoppingBag className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               {totalItems > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-teal-700 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-0.5">
                   {totalItems}
@@ -87,13 +87,22 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             </button>
 
             {/* Wishlist */}
-            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors">
-              <Heart className="w-5 h-5 text-gray-600" />
+            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+              <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
 
             {/* User */}
-            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors">
-              <User className="w-5 h-5 text-gray-600" />
+            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+              <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </button>
+
+            {/* Dark Theme Switcher */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
+              title={darkMode ? "Light Theme" : "Dark Theme"}
+            >
+              {darkMode ? <Sun className="w-5 h-5 text-gold-500" /> : <Moon className="w-5 h-5" />}
             </button>
 
             {/* Language */}
@@ -105,7 +114,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
                   className={`px-2.5 py-1 text-xs font-bold rounded-full transition-all ${
                     lang === code
                       ? 'bg-teal-700 text-white'
-                      : 'text-gray-500 hover:text-teal-700'
+                      : 'text-gray-500 hover:text-teal-700 dark:text-gray-400 dark:hover:text-teal-400'
                   }`}
                 >
                   {label}
@@ -128,23 +137,23 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             <button
               id="nav-search-btn"
               onClick={() => setSearchOpen(s => !s)}
-              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
+              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
             >
-              <Search className="w-5 h-5 text-gray-600" />
+              <Search className="w-5 h-5" />
             </button>
             <button
               id="nav-menu-btn"
               onClick={() => setOpen(o => !o)}
-              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 rounded-full transition-colors"
+              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
             >
-              {open ? <X className="w-5 h-5 text-gray-600" /> : <Menu className="w-5 h-5 text-gray-600" />}
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
         {/* Search Bar (expands on click) */}
         {searchOpen && (
-          <div className="border-t border-gray-100 px-4 py-2.5 bg-white animate-fade-in">
+          <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-2.5 bg-white dark:bg-gray-900 animate-fade-in">
             <div className="max-w-2xl mx-auto relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -152,7 +161,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder={lang === 'ar' ? 'ابحث عن منتج...' : lang === 'fr' ? 'Rechercher un produit...' : 'Search products...'}
-                className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 bg-gray-50"
+                className="w-full pr-10 pl-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-teal-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 dir="rtl"
               />
             </div>
@@ -161,7 +170,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
       </div>
 
       {/* ── Second Row: Category Navigation ── */}
-      <nav className="hidden md:flex items-center justify-center h-11 bg-white border-b border-gray-100 overflow-x-auto">
+      <nav className="hidden md:flex items-center justify-center h-11 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
         <div className="flex items-center gap-0">
           {categories.map(({ key, label }) => (
             <button
@@ -170,7 +179,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
                 if (key === 'admin') goHome('services');
                 else { goStore(key); }
               }}
-              className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors whitespace-nowrap relative group"
+              className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50 dark:hover:bg-gray-800 transition-colors whitespace-nowrap relative group"
             >
               {label}
               <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
@@ -188,7 +197,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
 
       {/* ── Mobile Drawer ── */}
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-xl animate-slide-up">
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-xl animate-slide-up">
           <div className="px-4 py-3 space-y-0.5">
             {categories.map(({ key, label }) => (
               <button
@@ -198,7 +207,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
                   else goStore(key);
                   setOpen(false);
                 }}
-                className="flex items-center w-full py-3 px-2 text-right font-semibold text-gray-700 border-b border-gray-50 hover:text-teal-700 hover:bg-teal-50/50 rounded-lg transition-colors text-sm"
+                className="flex items-center w-full py-3 px-2 text-right font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-50 dark:border-gray-850 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm"
               >
                 {label}
               </button>

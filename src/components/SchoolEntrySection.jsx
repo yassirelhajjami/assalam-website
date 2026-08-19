@@ -79,7 +79,7 @@ export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart =
   };
 
   return (
-    <section className="py-10 bg-white border-b border-gray-100" dir="rtl">
+    <section className="py-10 bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row gap-6 items-stretch">
           
@@ -164,13 +164,13 @@ export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart =
                     {/* Content Details */}
                     <div className="p-3 flex flex-col gap-1.5 justify-between flex-1">
                       <Stars rating={product.rating} />
-                      <h4 className="font-bold text-xs text-gray-800 line-clamp-2 leading-snug h-[34px]">
+                      <h4 className="font-bold text-xs text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug h-[34px]">
                         {product.name}
                       </h4>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-teal-700">{product.price}</span>
+                        <span className="text-xs font-bold text-teal-700 dark:text-teal-400">{product.price}</span>
                         {quantity > 0 && (
-                          <span className="text-[10px] text-gray-400 font-semibold">
+                          <span className="text-[10px] text-gray-400 dark:text-gray-500 font-semibold">
                             {lang === 'ar' ? `بالسلة: ${quantity}` : lang === 'fr' ? `Qté: ${quantity}` : `Cart: ${quantity}`}
                           </span>
                         )}

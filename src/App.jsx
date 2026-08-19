@@ -15,6 +15,26 @@ const App = () => {
   const [scrolled, setScrolled] = useState(false);
   const [page, setPage]         = useState('home');
   const [storeCat, setStoreCat] = useState('all');
+  
+  // Theme State
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem('assalam_dark');
+      return saved ? JSON.parse(saved) : false;
+    } catch {
+      return false;
+    }
+  });
+
+  // Sync theme to localStorage
+  useEffect(() => {
+    localStorage.setItem('assalam_dark', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const [cart, setCart] = useState(() => {
     try {
@@ -70,13 +90,14 @@ const App = () => {
   }, [lang]);
 
   return (
-    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="font-arabic">
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="font-arabic text-gray-800 dark:text-gray-100 transition-colors duration-205">
       <Navbar
         lang={lang} setLang={setLang}
         scrolled={scrolled} scrollTo={scrollTo}
         page={page} setPage={setPage}
         cart={cart}
         setStoreCat={setStoreCat}
+        darkMode={darkMode} setDarkMode={setDarkMode}
       />
 
       {page === 'store' ? (
@@ -89,6 +110,7 @@ const App = () => {
           updateCartQuantity={updateCartQuantity}
           clearCart={clearCart}
           initialCat={storeCat}
+          darkMode={darkMode}
         />
       ) : (
         <>
