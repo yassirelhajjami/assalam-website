@@ -40,9 +40,16 @@ const PRODUCTS_DATA = {
     { id: 4,  cat: 'bureau',    img: lampImg,    name: 'Lampe de Bureau LED',   desc: 'Éclairage LED réglable, protège vos yeux.',                price: 'À partir de 80 DH',  priceNum: 80,  rating: 4 },
     { id: 5,  cat: 'bureau',    img: shelfImg,   name: 'Étagère à Livres',      desc: 'Étagère solide en bois, pour vos livres et dossiers.',      price: 'À partir de 200 DH', priceNum: 200, rating: 5 },
     { id: 6,  cat: 'bureau',    img: standImg,   name: 'Support Multifonction', desc: 'Support pour écran, livres ou documents.',                  price: 'À partir de 120 DH', priceNum: 120, rating: 4 },
-    { id: 7,  cat: 'papeterie', img: pensImg,    name: 'Stylos & Crayons',      desc: 'Large gamme de stylos et crayons de toutes marques.',       price: 'À partir de 3 DH',   priceNum: 3,   rating: 5 },
-    { id: 8,  cat: 'papeterie', img: paperImg,   name: 'Papier & Cahiers',      desc: 'Rames A4, cahiers grands et petits formats.',               price: 'À partir de 15 DH',  priceNum: 15,  rating: 4 },
-    { id: 9,  cat: 'papeterie', img: folderImg,  name: 'Classeurs & Dossiers',  desc: 'Classeurs rigides, intercalaires, pochettes plastiques.',   price: 'À partir de 10 DH',  priceNum: 10,  rating: 4 },
+    
+    // Papeterie / School tools
+    { id: 7,  cat: 'papeterie', sub: 'pens',      img: pensImg,    name: 'Stylo effaçable original SBC', desc: 'Stylo gel effaçable haute qualité, idéal pour l\'école.', price: '3.45 DH', priceNum: 3.45, rating: 5 },
+    { id: 8,  cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'Cahier universitaire A4 luxe', desc: 'Cahier de qualité supérieure avec spirale métallique.', price: '17.25 DH', priceNum: 17.25, rating: 5 },
+    { id: 13, cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'Cahier Kraft A5 - A4',        desc: 'Cahier en papier kraft authentique, couverture rigide.', price: '7.48 DH', priceNum: 7.48, rating: 4 },
+    { id: 9,  cat: 'papeterie', sub: 'covers',    img: folderImg,  name: 'Couvre livre adhésif SBC',    desc: 'Rouleau de plastique adhésif transparent pour couvrir les livres.', price: '8.05 DH', priceNum: 8.05, rating: 5 },
+    { id: 14, cat: 'papeterie', sub: 'bags',      img: shelfImg,   name: 'Sac à dos complet filles',    desc: 'Ensemble complet comprenant sac à dos, trousse et boîte à lunch.', price: '149.00 DH', priceNum: 149, rating: 5 },
+    { id: 15, cat: 'papeterie', sub: 'bags',      img: folderImg,  name: 'Sac à dos complet garçons',   desc: 'Ensemble de sac à dos solide avec compartiments multiples.', price: '149.00 DH', priceNum: 149, rating: 5 },
+    { id: 16, cat: 'papeterie', sub: 'colors',    img: pensImg,    name: 'Crayons de couleur SBC 24',   desc: 'Boîte de 24 crayons de couleur de qualité professionnelle.', price: '24.00 DH', priceNum: 24, rating: 4 },
+    
     { id: 10, cat: 'livres',    img: shelfImg,   name: 'Livres Scolaires',      desc: 'Manuels officiels pour tous niveaux. Toutes matières.',     price: 'Sur demande',        priceNum: 0,   rating: 5 },
     { id: 11, cat: 'livres',    img: folderImg,  name: 'Fournitures Scolaires', desc: 'Kits complets pour la rentrée.',                            price: 'Sur demande',        priceNum: 0,   rating: 5 },
     { id: 12, cat: 'livres',    img: standImg,   name: 'Livres Parascolaires',  desc: 'Cahiers d\'exercices, guides pédagogiques, dictionnaires.', price: 'Sur demande',        priceNum: 0,   rating: 4 },
@@ -54,9 +61,16 @@ const PRODUCTS_DATA = {
     { id: 4,  cat: 'bureau',    img: lampImg,    name: 'مصباح مكتبي LED',       desc: 'إضاءة LED قابلة للتعديل، تحمي عينيك.',                    price: 'ابتداءً من 80 درهم',  priceNum: 80,  rating: 4 },
     { id: 5,  cat: 'bureau',    img: shelfImg,   name: 'رف كتب',                desc: 'رف متين من الخشب، مثالي لتنظيم كتبك.',                     price: 'ابتداءً من 200 درهم', priceNum: 200, rating: 5 },
     { id: 6,  cat: 'bureau',    img: standImg,   name: 'حامل متعدد الوظائف',    desc: 'حامل للشاشة أو الكتب أو الوثائق.',                        price: 'ابتداءً من 120 درهم', priceNum: 120, rating: 4 },
-    { id: 7,  cat: 'papeterie', img: pensImg,    name: 'أقلام وأدوات الكتابة',  desc: 'مجموعة واسعة من الأقلام والرصاص من جميع العلامات.',       price: 'ابتداءً من 3 دراهم',  priceNum: 3,   rating: 5 },
-    { id: 8,  cat: 'papeterie', img: paperImg,   name: 'ورق وكراسات',           desc: 'رزم ورق A4، كراسات كبيرة وصغيرة.',                        price: 'ابتداءً من 15 درهم',  priceNum: 15,  rating: 4 },
-    { id: 9,  cat: 'papeterie', img: folderImg,  name: 'ملفات وحافظات',         desc: 'ملفات صلبة، فواصل، أكياس بلاستيكية.',                     price: 'ابتداءً من 10 دراهم', priceNum: 10,  rating: 4 },
+    
+    // Papeterie / School tools
+    { id: 7,  cat: 'papeterie', sub: 'pens',      img: pensImg,    name: 'قلم قابل للمسح SBC الأصلي',  desc: 'قلم حبر جاف قابل للمسح بجودة عالية، مثالي للكتابة المدرسية.', price: '3.45 درهم', priceNum: 3.45, rating: 5 },
+    { id: 8,  cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'دفتر جامعة عربي فاخر A4',   desc: 'دفتر جامعي فاخر ذو جودة عالية بسلك معدني متين.', price: '17.25 درهم', priceNum: 17.25, rating: 5 },
+    { id: 13, cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'دفتر جامعة كرافت A5 - A4',  desc: 'دفتر كرافت بيئي أنيق، غلاف سميك متين.', price: '7.48 درهم', priceNum: 7.48, rating: 4 },
+    { id: 9,  cat: 'papeterie', sub: 'covers',    img: folderImg,  name: 'تجليد ذاتي اللصق SBC الأصلي', desc: 'بلاستيك شفاف لاصق لتجليد الكتب وحمايتها.', price: '8.05 درهم', priceNum: 8.05, rating: 5 },
+    { id: 14, cat: 'papeterie', sub: 'bags',      img: shelfImg,   name: 'حقيبة مدرسية متكاملة للبنات', desc: 'طقم حقيبة مدرسية متكامل يشمل المقلمية وحافظة الطعام.', price: '149.00 درهم', priceNum: 149, rating: 5 },
+    { id: 15, cat: 'papeterie', sub: 'bags',      img: folderImg,  name: 'حقيبة مدرسية متكاملة للأولاد', desc: 'حقيبة ظهر متينة بجيوب متعددة وتصميم رياضي.', price: '149.00 درهم', priceNum: 149, rating: 5 },
+    { id: 16, cat: 'papeterie', sub: 'colors',    img: pensImg,    name: 'ألوان خشبية SBC 24 لون',    desc: 'علبة ألوان خشبية ناصعة لجميع الأنشطة الفنية المدرسية.', price: '24.00 درهم', priceNum: 24, rating: 4 },
+    
     { id: 10, cat: 'livres',    img: shelfImg,   name: 'الكتب المدرسية',        desc: 'الكتب الرسمية لجميع المستويات. جميع المواد.',              price: 'عند الطلب',           priceNum: 0,   rating: 5 },
     { id: 11, cat: 'livres',    img: folderImg,  name: 'اللوازم المدرسية',      desc: 'مجموعات كاملة للدخول المدرسي.',                            price: 'عند الطلب',           priceNum: 0,   rating: 5 },
     { id: 12, cat: 'livres',    img: standImg,   name: 'كتب تكميلية',           desc: 'كراسات تمارين، مراجع تربوية، قواميس.',                    price: 'عند الطلب',           priceNum: 0,   rating: 4 },
@@ -68,9 +82,16 @@ const PRODUCTS_DATA = {
     { id: 4,  cat: 'bureau',    img: lampImg,    name: 'LED Desk Lamp',         desc: 'Adjustable LED lighting that protects your eyes.',          price: 'From 80 MAD',  priceNum: 80,  rating: 4 },
     { id: 5,  cat: 'bureau',    img: shelfImg,   name: 'Bookshelf',             desc: 'Solid wood shelf, perfect for books and folders.',          price: 'From 200 MAD', priceNum: 200, rating: 5 },
     { id: 6,  cat: 'bureau',    img: standImg,   name: 'Multifunction Stand',   desc: 'Stand for monitor, books, or documents.',                   price: 'From 120 MAD', priceNum: 120, rating: 4 },
-    { id: 7,  cat: 'papeterie', img: pensImg,    name: 'Pens & Pencils',        desc: 'Wide range of pens and pencils of all brands.',             price: 'From 3 MAD',   priceNum: 3,   rating: 5 },
-    { id: 8,  cat: 'papeterie', img: paperImg,   name: 'Paper & Notebooks',     desc: 'A4 reams, large and small format notebooks.',               price: 'From 15 MAD',  priceNum: 15,  rating: 4 },
-    { id: 9,  cat: 'papeterie', img: folderImg,  name: 'Binders & Folders',     desc: 'Hard binders, dividers, plastic sleeves.',                  price: 'From 10 MAD',  priceNum: 10,  rating: 4 },
+    
+    // Papeterie / School tools
+    { id: 7,  cat: 'papeterie', sub: 'pens',      img: pensImg,    name: 'SBC Original Erasable Pen',    desc: 'High quality erasable gel ink pen, perfect for school.', price: '3.45 MAD', priceNum: 3.45, rating: 5 },
+    { id: 8,  cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'Premium College Notebook A4',  desc: 'High quality notebook with durable metallic spiral.', price: '17.25 MAD', priceNum: 17.25, rating: 5 },
+    { id: 13, cat: 'papeterie', sub: 'notebooks', img: paperImg,   name: 'Kraft College Notebook A5/A4', desc: 'Chic environmental kraft paper college notebook.', price: '7.48 MAD', priceNum: 7.48, rating: 4 },
+    { id: 9,  cat: 'papeterie', sub: 'covers',    img: folderImg,  name: 'SBC Self-Adhesive Book Cover', desc: 'Clear plastic self-adhesive wrap to protect school books.', price: '8.05 MAD', priceNum: 8.05, rating: 5 },
+    { id: 14, cat: 'papeterie', sub: 'bags',      img: shelfImg,   name: 'Complete School Bag Set Girl', desc: 'Durable school backpack combo with lunchbox and pencil case.', price: '149.00 MAD', priceNum: 149, rating: 5 },
+    { id: 15, cat: 'papeterie', sub: 'bags',      img: folderImg,  name: 'Complete School Bag Set Boy',  desc: 'Sporty multi-compartment school bag set for boys.', price: '149.00 MAD', priceNum: 149, rating: 5 },
+    { id: 16, cat: 'papeterie', sub: 'colors',    img: pensImg,    name: 'SBC Colored Pencils 24 Pack',  desc: 'Vibrant coloring pencils box for arts and crafts.', price: '24.00 MAD', priceNum: 24, rating: 4 },
+    
     { id: 10, cat: 'livres',    img: shelfImg,   name: 'School Textbooks',      desc: 'Official manuals for all levels. All subjects.',            price: 'On request',   priceNum: 0,   rating: 5 },
     { id: 11, cat: 'livres',    img: folderImg,  name: 'School Supplies',       desc: 'Complete back-to-school kits.',                             price: 'On request',   priceNum: 0,   rating: 5 },
     { id: 12, cat: 'livres',    img: standImg,   name: 'Study Books',           desc: 'Exercise books, educational guides, dictionaries.',         price: 'On request',   priceNum: 0,   rating: 4 },
@@ -187,15 +208,21 @@ export default function Store({
   removeFromCart,
   updateCartQuantity,
   clearCart,
+  initialCat = 'all'
 }) {
-  const [cat, setCat] = useState('all');
+  const [cat, setCat] = useState(initialCat);
+  const [subcat, setSubcat] = useState('all');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const c = CONTENT[lang];
   const all = PRODUCTS_DATA[lang];
   const tCart = translations[lang].cart;
 
-  const filtered = cat === 'all' ? all : all.filter(p => p.cat === cat);
+  const filtered = cat === 'all'
+    ? all
+    : cat === 'papeterie' && subcat !== 'all'
+      ? all.filter(p => p.cat === cat && p.sub === subcat)
+      : all.filter(p => p.cat === cat);
 
   const cartItems = cart.map(item => {
     const p = all.find(x => x.id === item.id);
@@ -212,6 +239,38 @@ export default function Store({
     { key: 'papeterie', label: c.papeterie },
     { key: 'livres',    label: c.livres },
   ];
+
+  const subcats = {
+    ar: [
+      { key: 'all',       label: 'الكل' },
+      { key: 'notebooks', label: 'الدفاتر والورق' },
+      { key: 'bags',      label: 'الشنط والمقلميات' },
+      { key: 'colors',    label: 'ألوان مدرسية' },
+      { key: 'pens',      label: 'أقلام ومحايات' },
+      { key: 'covers',    label: 'تجليد وأغلفة' },
+    ],
+    fr: [
+      { key: 'all',       label: 'Tout' },
+      { key: 'notebooks', label: 'Cahiers & Papier' },
+      { key: 'bags',      label: 'Sacs & Trousses' },
+      { key: 'colors',    label: 'Couleurs' },
+      { key: 'pens',      label: 'Stylos & Gommes' },
+      { key: 'covers',    label: 'Couvre-Livres' },
+    ],
+    en: [
+      { key: 'all',       label: 'All' },
+      { key: 'notebooks', label: 'Notebooks & Paper' },
+      { key: 'bags',      label: 'Bags & Pencil cases' },
+      { key: 'colors',    label: 'Colors' },
+      { key: 'pens',      label: 'Pens & Erasers' },
+      { key: 'covers',    label: 'Book Covers' },
+    ]
+  }[lang] || [];
+
+  const changeCategory = (key) => {
+    setCat(key);
+    setSubcat('all');
+  };
 
   const handleWhatsAppCheckout = () => {
     let msg = `${tCart.orderFormat}\n\n`;
@@ -261,26 +320,51 @@ export default function Store({
         </div>
 
         {/* ── Filter tabs + count ── */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
-          {CATS.map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setCat(key)}
-              className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
-                cat === key
-                  ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-teal-400 hover:text-teal-700'
-              }`}
+        <div className="flex flex-col gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2">
+            {CATS.map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => changeCategory(key)}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
+                  cat === key
+                    ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-teal-400 hover:text-teal-700'
+                }`}
+              >
+                {label}
+                {key === 'all' && (
+                  <span className="mr-1.5 text-xs opacity-70">({all.length})</span>
+                )}
+              </button>
+            ))}
+            <span className="text-sm text-gray-400 mr-auto">
+              {lang === 'ar' ? `إجمالي ${filtered.length} منتج` : lang === 'fr' ? `${filtered.length} produits` : `${filtered.length} products`}
+            </span>
+          </div>
+
+          {/* School subcategories capsule row */}
+          {cat === 'papeterie' && (
+            <div 
+              className="flex gap-2 overflow-x-auto pb-2"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {label}
-              {key === 'all' && (
-                <span className="mr-1.5 text-xs opacity-70">({all.length})</span>
-              )}
-            </button>
-          ))}
-          <span className="text-sm text-gray-400 mr-auto">
-            {lang === 'ar' ? `إجمالي ${filtered.length} منتج` : lang === 'fr' ? `${filtered.length} produits` : `${filtered.length} products`}
-          </span>
+              {subcats.map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setSubcat(key)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap transition-all ${
+                    subcat === key
+                      ? 'bg-teal-50 border-teal-700 text-teal-800 font-bold'
+                      : 'bg-white border-gray-200 text-gray-600 hover:border-teal-400 hover:text-teal-700'
+                  }`}
+                  style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ── Product Grid ── */}

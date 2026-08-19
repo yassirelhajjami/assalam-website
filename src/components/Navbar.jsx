@@ -42,7 +42,7 @@ const getCategories = (lang) => {
   return cats[lang] || cats.ar;
 };
 
-export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPage, cart }) {
+export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPage, cart, setStoreCat }) {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,7 +56,12 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
     setOpen(false);
   };
 
-  const goStore = () => { setPage('store'); setOpen(false); window.scrollTo(0,0); };
+  const goStore = (catKey = 'all') => {
+    if (setStoreCat) setStoreCat(catKey);
+    setPage('store');
+    setOpen(false);
+    window.scrollTo(0,0);
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.1)' }}>
@@ -163,7 +168,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
               key={key}
               onClick={() => {
                 if (key === 'admin') goHome('services');
-                else { goStore(); }
+                else { goStore(key); }
               }}
               className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors whitespace-nowrap relative group"
             >
@@ -190,7 +195,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
                 key={key}
                 onClick={() => {
                   if (key === 'admin') goHome('services');
-                  else goStore();
+                  else goStore(key);
                   setOpen(false);
                 }}
                 className="flex items-center w-full py-3 px-2 text-right font-semibold text-gray-700 border-b border-gray-50 hover:text-teal-700 hover:bg-teal-50/50 rounded-lg transition-colors text-sm"

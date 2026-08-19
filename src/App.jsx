@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
-import Navbar        from './components/Navbar';
-import Hero          from './components/Hero';
-import CategoryIcons from './components/CategoryIcons';
-import Services      from './components/Services';
-import About         from './components/About';
-import Gallery       from './components/Gallery';
-import Contact       from './components/Contact';
-import Footer        from './components/Footer';
-import Store         from './components/Store';
+import Navbar             from './components/Navbar';
+import Hero               from './components/Hero';
+import CategoryIcons      from './components/CategoryIcons';
+import SchoolEntrySection from './components/SchoolEntrySection';
+import Services           from './components/Services';
+import About              from './components/About';
+import Gallery            from './components/Gallery';
+import Contact            from './components/Contact';
+import Footer             from './components/Footer';
+import Store              from './components/Store';
 
 const App = () => {
   const [lang, setLang]         = useState('ar');
   const [scrolled, setScrolled] = useState(false);
   const [page, setPage]         = useState('home');
+  const [storeCat, setStoreCat] = useState('all');
 
   const [cart, setCart] = useState(() => {
     try {
@@ -74,6 +76,7 @@ const App = () => {
         scrolled={scrolled} scrollTo={scrollTo}
         page={page} setPage={setPage}
         cart={cart}
+        setStoreCat={setStoreCat}
       />
 
       {page === 'store' ? (
@@ -85,11 +88,18 @@ const App = () => {
           removeFromCart={removeFromCart}
           updateCartQuantity={updateCartQuantity}
           clearCart={clearCart}
+          initialCat={storeCat}
         />
       ) : (
         <>
           <Hero lang={lang} scrollTo={scrollTo} setPage={setPage} />
-          <CategoryIcons lang={lang} onCategoryClick={() => setPage('store')} />
+          <CategoryIcons lang={lang} onCategoryClick={(catKey) => { setStoreCat(catKey); setPage('store'); window.scrollTo(0,0); }} />
+          <SchoolEntrySection 
+            lang={lang} 
+            onCtaClick={() => { setStoreCat('papeterie'); setPage('store'); window.scrollTo(0,0); }} 
+            addToCart={addToCart}
+            cart={cart}
+          />
           <Services lang={lang} />
           <About    lang={lang} />
           <Gallery  lang={lang} setPage={setPage} />
