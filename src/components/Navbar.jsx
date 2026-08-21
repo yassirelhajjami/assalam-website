@@ -63,6 +63,21 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
     window.scrollTo(0,0);
   };
 
+  const handleCategorySelect = (key) => {
+    setOpen(false);
+    if (key === 'print') {
+      setPage('print-services');
+      window.scrollTo(0,0);
+    } else if (key === 'admin') {
+      setPage('admin-services');
+      window.scrollTo(0,0);
+    } else {
+      if (setStoreCat) setStoreCat(key);
+      setPage('store');
+      window.scrollTo(0,0);
+    }
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}>
       {/* ── Top Utility Bar ── */}
@@ -175,10 +190,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
           {categories.map(({ key, label }) => (
             <button
               key={key}
-              onClick={() => {
-                if (key === 'admin') goHome('services');
-                else { goStore(key); }
-              }}
+              onClick={() => handleCategorySelect(key)}
               className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50 dark:hover:bg-gray-800 transition-colors whitespace-nowrap relative group"
             >
               {label}
@@ -205,11 +217,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
               {categories.map(({ key, label }) => (
                 <button
                   key={key}
-                  onClick={() => {
-                    if (key === 'admin') goHome('services');
-                    else goStore(key);
-                    setOpen(false);
-                  }}
+                  onClick={() => handleCategorySelect(key)}
                   className="flex items-center justify-center text-center py-2.5 px-3 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-gray-700 rounded-xl transition-all text-xs border border-transparent dark:border-gray-850"
                 >
                   {label}

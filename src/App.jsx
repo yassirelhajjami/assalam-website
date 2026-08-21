@@ -10,6 +10,8 @@ import Contact            from './components/Contact';
 import Footer             from './components/Footer';
 import Store              from './components/Store';
 import AdminPanel         from './components/AdminPanel';
+import PrintServicesPage  from './components/PrintServicesPage';
+import AdminServicesPage  from './components/AdminServicesPage';
 import { supabase }      from './supabaseClient';
 import { translations }  from './data/translations';
 
@@ -17,7 +19,11 @@ const App = () => {
   const [lang, setLang]         = useState('ar');
   const [scrolled, setScrolled] = useState(false);
   const [page, setPage]         = useState(() => {
-    return window.location.pathname === '/assalam-admin' ? 'admin' : 'home';
+    const path = window.location.pathname;
+    if (path === '/assalam-admin') return 'admin';
+    if (path === '/print-services') return 'print-services';
+    if (path === '/admin-services') return 'admin-services';
+    return 'home';
   });
   const [storeCat, setStoreCat] = useState('all');
   
@@ -69,12 +75,15 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const path = window.location.pathname;
     if (page === 'admin') {
-      if (window.location.pathname !== '/assalam-admin') {
-        window.history.pushState({}, '', '/assalam-admin');
-      }
+      if (path !== '/assalam-admin') window.history.pushState({}, '', '/assalam-admin');
+    } else if (page === 'print-services') {
+      if (path !== '/print-services') window.history.pushState({}, '', '/print-services');
+    } else if (page === 'admin-services') {
+      if (path !== '/admin-services') window.history.pushState({}, '', '/admin-services');
     } else {
-      if (window.location.pathname === '/assalam-admin') {
+      if (path === '/assalam-admin' || path === '/print-services' || path === '/admin-services') {
         window.history.pushState({}, '', '/');
       }
     }
@@ -178,6 +187,17 @@ const App = () => {
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />
+      ) : page === 'print-services' ? (
+        <PrintServicesPage
+          lang={lang}
+          setPage={setPage}
+          translations={activeTranslations}
+        />
+      ) : page === 'admin-services' ? (
+        <AdminServicesPage
+          lang={lang}
+          setPage={setPage}
+        />
       ) : page === 'store' ? (
         <Store
           lang={lang}
@@ -195,7 +215,15 @@ const App = () => {
       ) : (
         <>
           <Hero lang={lang} scrollTo={scrollTo} setPage={setPage} banners={dbBanners} translations={activeTranslations} />
-          <CategoryIcons lang={lang} onCategoryClick={(catKey) => { setStoreCat(catKey); setPage('store'); window.scrollTo(0,0); }} />
+          <CategoryIcons
+            lang={lang}
+            onCategoryClick={(catKey) => {
+              if (catKey === 'print') { setPage('print-services'); }
+              else if (catKey === 'admin') { setPage('admin-services'); }
+              else { setStoreCat(catKey); setPage('store'); }
+              window.scrollTo(0, 0);
+            }}
+          />
           <SchoolEntrySection 
             lang={lang} 
             onCtaClick={() => { setStoreCat('papeterie'); setPage('store'); window.scrollTo(0,0); }} 

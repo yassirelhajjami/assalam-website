@@ -256,9 +256,11 @@ export default function Store({
 
   const CATS = [
     { key: 'all',       label: c.all },
-    { key: 'bureau',    label: c.bureau },
-    { key: 'papeterie', label: c.papeterie },
-    { key: 'livres',    label: c.livres },
+    { key: 'livres',    label: c.livres || (lang === 'ar' ? 'كتب ومناهج' : lang === 'fr' ? 'Livres' : 'Books') },
+    { key: 'papeterie', label: c.papeterie || (lang === 'ar' ? 'أدوات قرطاسية ومدرسية' : lang === 'fr' ? 'Papeterie' : 'Stationery') },
+    { key: 'bureau',    label: c.bureau || (lang === 'ar' ? 'أثاث مكتبي' : lang === 'fr' ? 'Mobilier' : 'Furniture') },
+    { key: 'print',     label: lang === 'ar' ? 'طباعة وتصوير' : lang === 'fr' ? 'Impression & Copie' : 'Printing & Copying' },
+    { key: 'admin',     label: lang === 'ar' ? 'خدمات إدارية' : lang === 'fr' ? 'Services Admin' : 'Admin Services' },
   ];
 
   const subcats = {
@@ -346,7 +348,11 @@ export default function Store({
             {CATS.map(({ key, label }) => (
               <button
                 key={key}
-                onClick={() => changeCategory(key)}
+                onClick={() => {
+                  if (key === 'print') { setPage('print-services'); }
+                  else if (key === 'admin') { setPage('admin-services'); }
+                  else { changeCategory(key); }
+                }}
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
                   cat === key
                     ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
