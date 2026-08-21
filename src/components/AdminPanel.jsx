@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import {
   Plus, Trash2, Edit, Save, LogOut, Lock, Mail, Image,
-  Folder, Layers, MessageSquare, Phone, MapPin, Eye, ShoppingCart, RefreshCw
+  Folder, Layers, MessageSquare, Phone, MapPin, Eye, ShoppingCart, RefreshCw,
+  Sun, Moon
 } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { translations } from '../data/translations';
 
-export default function AdminPanel({ lang, setPage, products, setProducts, banners, setBanners, customSettings, setCustomSettings, reloadData }) {
+export default function AdminPanel({ lang, setPage, products, banners, customSettings, reloadData, darkMode, setDarkMode }) {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -627,7 +628,15 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 pt-[100px] pb-20">
-        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-8">
+        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 relative">
+          <button
+            type="button"
+            onClick={() => setDarkMode(!darkMode)}
+            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+            title="Toggle Theme"
+          >
+            {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-slate-500" />}
+          </button>
           <div className="text-center mb-8">
             <div className="w-14 h-14 bg-teal-50 dark:bg-teal-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-teal-100 dark:border-teal-900/40">
               <Lock className="w-7 h-7 text-teal-700 dark:text-teal-400" />
@@ -709,7 +718,14 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Logged in as {user.email}</p>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 text-gray-500 hover:text-teal-650 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 rounded-xl transition-all border border-gray-200/40 dark:border-gray-800 flex items-center justify-center"
+              title="Toggle Dark Mode"
+            >
+              {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-slate-500" />}
+            </button>
             <button
               onClick={() => setPage('home')}
               className="px-4 py-2 text-xs font-semibold bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-600 dark:text-gray-300 rounded-xl transition-all border border-gray-200/40 dark:border-gray-800"

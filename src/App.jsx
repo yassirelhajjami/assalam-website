@@ -175,6 +175,8 @@ const App = () => {
           banners={dbBanners}
           customSettings={dbSettings}
           reloadData={loadData}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
         />
       ) : page === 'store' ? (
         <Store
