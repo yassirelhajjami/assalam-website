@@ -160,7 +160,7 @@ export default function Hero({ lang, scrollTo, setPage }) {
         />
 
         {/* Tagline overlay */}
-        <div className="absolute bottom-6 inset-x-0 flex flex-col items-center gap-1 pointer-events-none">
+        <div className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-1 pointer-events-none hidden sm:flex">
           <p className="text-white text-xl md:text-3xl font-bold text-center drop-shadow-lg px-4">
             {main}
           </p>
@@ -170,27 +170,27 @@ export default function Hero({ lang, scrollTo, setPage }) {
         {/* Prev/Next arrows */}
         <button
           onClick={prev}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors hidden md:flex"
         >
           <ChevronRight className="w-5 h-5 text-gray-700" />
         </button>
         <button
           onClick={next}
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors hidden md:flex"
         >
           <ChevronLeft className="w-5 h-5 text-gray-700" />
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 bg-black/35 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
           {BANNERS.map((_, idx) => (
             <button
               key={idx}
               onClick={() => goTo(idx)}
               className={`rounded-full transition-all ${
                 idx === current
-                  ? 'w-5 h-2 bg-white'
-                  : 'w-2 h-2 bg-white/50 hover:bg-white/75'
+                  ? 'w-4.5 h-1.5 bg-white'
+                  : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
               }`}
             />
           ))}

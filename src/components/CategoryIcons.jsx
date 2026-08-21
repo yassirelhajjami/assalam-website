@@ -51,7 +51,7 @@ export default function CategoryIcons({ lang, onCategoryClick }) {
         <div className="relative">
           {/* Hide scrollbar but keep scroll */}
           <div
-            className="flex gap-6 overflow-x-auto pb-1"
+            className="flex gap-6 overflow-x-auto pb-1 no-scrollbar"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map(({ icon: Icon, bg, color, label, key }) => (

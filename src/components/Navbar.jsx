@@ -87,12 +87,12 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             </button>
 
             {/* Wishlist */}
-            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+            <button className="hidden md:flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
               <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
 
             {/* User */}
-            <button className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+            <button className="hidden md:flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
               <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
 
@@ -106,7 +106,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             </button>
 
             {/* Language */}
-            <div className="flex items-center gap-0.5 ml-1">
+            <div className="hidden md:flex items-center gap-0.5 ml-1">
               {LANGS.map(({ code, label }) => (
                 <button
                   key={code}
@@ -198,27 +198,73 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
       {/* ── Mobile Drawer ── */}
       {open && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-xl animate-slide-up">
-          <div className="px-4 py-3 space-y-0.5">
-            {categories.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => {
-                  if (key === 'admin') goHome('services');
-                  else goStore(key);
-                  setOpen(false);
-                }}
-                className="flex items-center w-full py-3 px-2 text-right font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-50 dark:border-gray-850 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm"
-              >
-                {label}
+          <div className="px-4 py-4 space-y-4">
+            
+            {/* Category links in a 2-column grid */}
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => {
+                    if (key === 'admin') goHome('services');
+                    else goStore(key);
+                    setOpen(false);
+                  }}
+                  className="flex items-center justify-center text-center py-2.5 px-3 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-gray-700 rounded-xl transition-all text-xs border border-transparent dark:border-gray-850"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Quick Actions (Wishlist & Profile) */}
+            <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+              <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-semibold text-xs border border-transparent dark:border-gray-800">
+                <Heart className="w-4 h-4 text-gray-500" />
+                {lang === 'ar' ? 'المفضلة' : lang === 'fr' ? 'Favoris' : 'Wishlist'}
               </button>
-            ))}
-            <a
-              href="tel:0699165490"
-              className="flex items-center justify-center gap-2 w-full py-3 mt-2 bg-teal-700 text-white rounded-xl font-semibold"
-            >
-              <Phone className="w-4 h-4" />
-              06 99 16 54 90
-            </a>
+              <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-55 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-semibold text-xs border border-transparent dark:border-gray-800">
+                <User className="w-4 h-4 text-gray-500" />
+                {lang === 'ar' ? 'حسابي' : lang === 'fr' ? 'Mon Compte' : 'Account'}
+              </button>
+            </div>
+
+            {/* Language Switcher in Drawer */}
+            <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
+              <p className="text-xs font-bold text-gray-400 dark:text-gray-500 mb-2 px-1 text-start">
+                {lang === 'ar' ? 'اللغة' : lang === 'fr' ? 'Langue' : 'Language'}
+              </p>
+              <div className="flex gap-1.5">
+                {LANGS.map(({ code, label }) => (
+                  <button
+                    key={code}
+                    onClick={() => {
+                      setLang(code);
+                      setOpen(false);
+                    }}
+                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all border ${
+                      lang === code
+                        ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
+                        : 'bg-white dark:bg-gray-900 text-gray-500 border-gray-200 dark:border-gray-850 hover:text-teal-700 dark:text-gray-400'
+                    }`}
+                  >
+                    {label === 'ع' ? 'العربية' : label === 'FR' ? 'Français' : 'English'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Contact & Support */}
+            <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
+              <a
+                href="tel:0699165490"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-teal-700 text-white rounded-xl font-bold text-sm shadow-md hover:bg-teal-800 transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                {lang === 'ar' ? 'اتصل بنا: 0699165490' : lang === 'fr' ? 'Appeler: 06 99 16 54 90' : 'Call Us: 06 99 16 54 90'}
+              </a>
+            </div>
+
           </div>
         </div>
       )}

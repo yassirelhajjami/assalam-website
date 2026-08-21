@@ -346,7 +346,7 @@ export default function Store({
           {/* School subcategories capsule row */}
           {cat === 'papeterie' && (
             <div 
-              className="flex gap-2 overflow-x-auto pb-2"
+              className="flex gap-2 overflow-x-auto pb-2 no-scrollbar"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {subcats.map(({ key, label }) => (

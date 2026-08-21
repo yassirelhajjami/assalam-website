@@ -85,7 +85,7 @@ export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart =
           
           {/* Right Column: Promotional Card Banner */}
           <div 
-            className="w-full lg:w-1/4 rounded-2xl overflow-hidden relative flex flex-col justify-end p-6 min-h-[320px] lg:min-h-auto shadow-md group shrink-0"
+            className="w-full lg:w-1/4 rounded-2xl overflow-hidden relative flex flex-col justify-end p-5 md:p-6 min-h-[260px] md:min-h-auto lg:min-h-auto shadow-md group shrink-0"
             style={{
               backgroundImage: `url(${ad3})`,
               backgroundSize: 'cover',
@@ -95,15 +95,15 @@ export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart =
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/60 to-black/30 group-hover:via-teal-950/70 transition-colors duration-300" />
             
-            <div className="relative z-10 text-white flex flex-col gap-3">
+            <div className="relative z-10 text-white flex flex-col gap-2.5">
               <span className="w-12 h-1 bg-gold-500 rounded-full" />
-              <h3 className="text-2xl font-bold leading-tight">{t.title}</h3>
-              <p className="text-xs text-gray-200 leading-relaxed max-w-[220px]">
+              <h3 className="text-xl md:text-2xl font-bold leading-tight">{t.title}</h3>
+              <p className="text-[11px] md:text-xs text-gray-200 leading-relaxed max-w-[220px]">
                 {t.desc}
               </p>
               <button
                 onClick={onCtaClick}
-                className="mt-2 w-max px-6 py-2 border-2 border-white/80 hover:border-white text-white font-bold rounded-xl text-sm transition-all hover:bg-white/10"
+                className="mt-1 w-max px-5 py-2 border-2 border-white/80 hover:border-white text-white font-bold rounded-xl text-xs md:text-sm transition-all hover:bg-white/10"
               >
                 {t.cta}
               </button>
@@ -113,8 +113,8 @@ export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart =
           {/* Left Column: Horizontally Scrollable Products List */}
           <div className="w-full lg:w-3/4 overflow-hidden flex flex-col justify-center">
             <div 
-              className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1"
-              style={{ scrollbarWidth: 'thin' }}
+              className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1 no-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {products.map((product) => {
                 const isAdded = addedIds[product.id];

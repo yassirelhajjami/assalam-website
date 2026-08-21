@@ -65,7 +65,7 @@ export default function Gallery({ lang, setPage }) {
         </div>
 
         {/* Mini ads row */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {MINI_ADS.map((img, idx) => (
             <div
               key={idx}
@@ -76,7 +76,7 @@ export default function Gallery({ lang, setPage }) {
               <img
                 src={img}
                 alt={`Promotion ${idx + 1}`}
-                className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-32 sm:h-28 md:h-32 object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
           ))}
