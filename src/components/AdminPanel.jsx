@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Plus, Trash2, Edit, Save, LogOut, Lock, Mail, Image,
   Folder, Layers, MessageSquare, Phone, MapPin, Eye, ShoppingCart, RefreshCw,
-  Sun, Moon
+  Sun, Moon, ClipboardList, CheckCircle, Clock, XCircle, ChevronDown
 } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { translations } from '../data/translations';
@@ -14,6 +14,31 @@ export default function AdminPanel({ lang, setPage, products, banners, customSet
   const [loading, setLoading] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('products');
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+
+  const fetchOrders = async () => {
+    setOrdersLoading(true);
+    try {
+      const { data } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+      setOrders(data || []);
+    } catch (e) { console.error(e); }
+    finally { setOrdersLoading(false); }
+  };
+
+  const updateOrderStatus = async (id, status) => {
+    await supabase.from('orders').update({ status }).eq('id', id);
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
+  };
+
+  const deleteOrder = async (id) => {
+    if (!window.confirm('Delete this order?')) return;
+    await supabase.from('orders').delete().eq('id', id);
+    setOrders(prev => prev.filter(o => o.id !== id));
+  };
 
   // Product Form State
   const [prodId, setProdId] = useState(null);
@@ -744,23 +769,114 @@ export default function AdminPanel({ lang, setPage, products, banners, customSet
 
         {/* Tab switch buttons */}
         <div className="flex border-b border-gray-200 dark:border-gray-800 mb-6 gap-2">
-          {['products', 'banners', 'settings', 'recovery'].map(tab => (
+          {['products', 'orders', 'banners', 'settings', 'recovery'].map(tab => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => { setActiveTab(tab); if (tab === 'orders') fetchOrders(); }}
               className={`px-5 py-3 text-sm font-semibold capitalize border-b-2 transition-all ${
                 activeTab === tab
                   ? 'border-teal-700 text-teal-700 dark:text-teal-400'
                   : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
               }`}
             >
-              {tab === 'products' ? 'Products Catalog' : tab === 'banners' ? 'Hero Banners' : tab === 'settings' ? 'Text & Titles' : 'Setup Recovery'}
+              {tab === 'products' ? 'Products Catalog'
+                : tab === 'orders' ? '📦 Orders'
+                : tab === 'banners' ? 'Hero Banners'
+                : tab === 'settings' ? 'Text & Titles'
+                : 'Setup Recovery'}
             </button>
           ))}
         </div>
 
+        {/* ── TAB: ORDERS ── */}
+        {activeTab === 'orders' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-base font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-teal-600" />
+                Customer Orders
+                <span className="ml-1 px-2 py-0.5 text-xs bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 rounded-full font-bold">{orders.length}</span>
+              </h2>
+              <button onClick={fetchOrders} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 text-gray-600 dark:text-gray-300 rounded-xl border border-gray-200/40 dark:border-gray-800 transition-all">
+                <RefreshCw className={`w-3.5 h-3.5 ${ordersLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
+
+            {ordersLoading ? (
+              <div className="text-center py-16 text-gray-400">Loading orders...</div>
+            ) : orders.length === 0 ? (
+              <div className="text-center py-20 flex flex-col items-center gap-3 text-gray-400">
+                <ClipboardList className="w-14 h-14 text-gray-200 dark:text-gray-800" />
+                <p className="font-medium">No orders yet</p>
+                <p className="text-xs text-gray-400">Orders from customers will appear here</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {orders.map(order => (
+                  <div key={order.id} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-5 shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-bold text-gray-800 dark:text-gray-100">#{order.id} — {order.customer_name}</span>
+                          <span className={`px-2 py-0.5 text-[11px] font-bold rounded-full ${
+                            order.status === 'completed' ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400'
+                            : order.status === 'cancelled' ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                            : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'
+                          }`}>
+                            {order.status === 'completed' ? '✓ Completed' : order.status === 'cancelled' ? '✗ Cancelled' : '⏳ Pending'}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
+                          <span>📞 {order.customer_phone}</span>
+                          {order.customer_city && <span>📍 {order.customer_city}</span>}
+                          <span>🕐 {new Date(order.created_at).toLocaleDateString('fr-MA', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        {order.notes && <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 italic">"{order.notes}"</p>}
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <select
+                          value={order.status}
+                          onChange={e => updateOrderStatus(order.id, e.target.value)}
+                          className="px-3 py-1.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl text-xs font-semibold focus:outline-none"
+                        >
+                          <option value="pending">⏳ Pending</option>
+                          <option value="completed">✓ Completed</option>
+                          <option value="cancelled">✗ Cancelled</option>
+                        </select>
+                        <button
+                          onClick={() => deleteOrder(order.id)}
+                          className="p-1.5 text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                          title="Delete order"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Order items */}
+                    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 space-y-1.5">
+                      {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
+                        <div key={i} className="flex items-center justify-between text-xs">
+                          <span className="text-gray-600 dark:text-gray-300">{item.quantity}× {item.name}</span>
+                          <span className="font-semibold text-teal-700 dark:text-teal-400">{item.price}</span>
+                        </div>
+                      ))}
+                      <div className="pt-1.5 border-t border-gray-200 dark:border-gray-700 flex justify-between text-sm font-bold text-gray-800 dark:text-gray-100">
+                        <span>Total</span>
+                        <span>{order.total_amount} DH{order.has_on_demand ? '+' : ''}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* ── TAB 1: PRODUCTS MANAGER ── */}
         {activeTab === 'products' && (
+
           <div className="grid lg:grid-cols-3 gap-8 items-start">
             
             {/* Form Column */}

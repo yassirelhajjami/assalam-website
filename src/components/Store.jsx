@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
   Phone, ShoppingBag, Trash2, Plus, Minus, X,
-  Heart, Eye, Star, Filter, ChevronDown, ArrowRight, ShoppingCart
+  Heart, Eye, Star, Filter, ChevronDown, ArrowRight, ShoppingCart, User, MapPin, CheckCircle
 } from 'lucide-react';
 import { translations } from '../data/translations';
+import { supabase } from '../supabaseClient';
 
 import deskImg    from '../images/products/desk.jpg';
 import chairImg   from '../images/products/chair.jpg';
@@ -220,6 +221,13 @@ export default function Store({
   const [cat, setCat] = useState(initialCat);
   const [subcat, setSubcat] = useState('all');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerCity, setCustomerCity] = useState('');
+  const [customerNotes, setCustomerNotes] = useState('');
 
   // Sync category when navbar/parent changes the initialCat prop
   useEffect(() => {
@@ -302,14 +310,51 @@ export default function Store({
     setSubcat('all');
   };
 
-  const handleWhatsAppCheckout = () => {
-    let msg = `${tCart.orderFormat}\n\n`;
+  const handleWhatsAppCheckout = (name, phone, city, notes) => {
+    let msg = lang === 'ar'
+      ? `طلب جديد من ${name}\nالهاتف: ${phone}\nالمدينة: ${city || 'غير محدد'}\n\n`
+      : `Nouvelle commande de ${name}\nTél: ${phone}\nVille: ${city || 'Non précisé'}\n\n`;
     cartItems.forEach(item => {
       msg += `- ${item.quantity}x ${item.name} (${item.price})\n`;
     });
     msg += `\n${tCart.orderTotal}: ${estimatedTotal} DH`;
-    if (hasOnDemand) msg += ` (${tCart.exclDemand})`;
+    if (hasOnDemand) msg += ` (+${lang === 'ar' ? 'عند الطلب' : 'sur demande'})`;
+    if (notes) msg += `\n${lang === 'ar' ? 'ملاحظات' : 'Notes'}: ${notes}`;
     window.open(`https://wa.me/212699165490?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const handleCheckoutSubmit = async (e) => {
+    e.preventDefault();
+    setOrderLoading(true);
+    try {
+      const orderItems = cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        priceNum: item.priceNum,
+        quantity: item.quantity,
+        img: item.img,
+      }));
+      await supabase.from('orders').insert([{
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        customer_city: customerCity,
+        customer_address: '',
+        items: orderItems,
+        total_amount: estimatedTotal,
+        has_on_demand: hasOnDemand,
+        notes: customerNotes,
+        status: 'pending',
+      }]);
+      handleWhatsAppCheckout(customerName, customerPhone, customerCity, customerNotes);
+      setOrderSuccess(true);
+      clearCart();
+      setCustomerName(''); setCustomerPhone(''); setCustomerCity(''); setCustomerNotes('');
+    } catch (err) {
+      console.error('Order error:', err);
+    } finally {
+      setOrderLoading(false);
+    }
   };
 
   return (
@@ -549,14 +594,11 @@ export default function Store({
               <span className="text-xl font-bold text-teal-700 dark:text-teal-400">{estimatedTotal} DH{hasOnDemand && '+'}</span>
             </div>
             <button
-              onClick={handleWhatsAppCheckout}
-              className="w-full py-3 bg-[#25D366] hover:bg-[#20b85a] text-white font-bold rounded-xl flex items-center justify-center gap-2 text-sm transition-all shadow-sm"
+              onClick={() => { setIsDrawerOpen(false); setShowCheckout(true); setOrderSuccess(false); }}
+              className="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-sm transition-all shadow-sm"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.121.554 4.11 1.522 5.84L.057 23.71a.5.5 0 00.609.61l5.941-1.554A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.88 0-3.63-.49-5.15-1.34l-.36-.21-3.73.977.996-3.643-.232-.374A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-              </svg>
-              {tCart.checkout}
+              <ShoppingCart className="w-4 h-4" />
+              {lang === 'ar' ? 'تأكيد الطلب' : lang === 'fr' ? 'Passer la commande' : 'Place Order'}
             </button>
             <button
               onClick={clearCart}
@@ -567,6 +609,135 @@ export default function Store({
           </div>
         )}
       </div>
+
+      {/* ── Checkout Modal ── */}
+      {showCheckout && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+
+            {orderSuccess ? (
+              /* Success Screen */
+              <div className="p-8 text-center flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-teal-50 dark:bg-teal-900/20 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-9 h-9 text-teal-600 dark:text-teal-400" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                  {lang === 'ar' ? 'تم إرسال طلبك!' : lang === 'fr' ? 'Commande envoyée!' : 'Order Placed!'}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {lang === 'ar'
+                    ? 'تم حفظ طلبك وسيتواصل معك فريقنا عبر الواتساب قريباً.'
+                    : lang === 'fr'
+                    ? 'Votre commande a été enregistrée. Notre équipe vous contactera via WhatsApp.'
+                    : 'Your order has been saved. Our team will contact you via WhatsApp shortly.'}
+                </p>
+                <button
+                  onClick={() => setShowCheckout(false)}
+                  className="mt-2 px-8 py-2.5 bg-teal-700 hover:bg-teal-800 text-white rounded-xl font-bold text-sm transition-colors"
+                >
+                  {lang === 'ar' ? 'حسناً' : 'OK'}
+                </button>
+              </div>
+            ) : (
+              /* Checkout Form */
+              <>
+                <div className="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                  <h3 className="font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                    <User className="w-5 h-5 text-teal-600" />
+                    {lang === 'ar' ? 'بيانات الطلب' : lang === 'fr' ? 'Infos de commande' : 'Order Details'}
+                  </h3>
+                  <button onClick={() => setShowCheckout(false)} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-500">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleCheckoutSubmit} className="p-5 space-y-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                  {/* Order summary */}
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 space-y-1.5 max-h-28 overflow-y-auto">
+                    {cartItems.map(item => (
+                      <div key={item.id} className="flex justify-between text-xs text-gray-600 dark:text-gray-300">
+                        <span className="truncate flex-1">{item.quantity}× {item.name}</span>
+                        <span className="font-semibold text-teal-700 dark:text-teal-400 mr-2">{item.price}</span>
+                      </div>
+                    ))}
+                    <div className="pt-1.5 border-t border-gray-200 dark:border-gray-700 flex justify-between text-sm font-bold text-gray-800 dark:text-gray-100">
+                      <span>{lang === 'ar' ? 'المجموع' : 'Total'}</span>
+                      <span>{estimatedTotal} DH{hasOnDemand && '+'}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      {lang === 'ar' ? 'الاسم الكامل *' : lang === 'fr' ? 'Nom complet *' : 'Full Name *'}
+                    </label>
+                    <input
+                      required
+                      value={customerName}
+                      onChange={e => setCustomerName(e.target.value)}
+                      placeholder={lang === 'ar' ? 'محمد أمين...' : 'Mohamed Amine...'}
+                      className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      {lang === 'ar' ? 'رقم الهاتف *' : lang === 'fr' ? 'Numéro de téléphone *' : 'Phone Number *'}
+                    </label>
+                    <input
+                      required
+                      type="tel"
+                      value={customerPhone}
+                      onChange={e => setCustomerPhone(e.target.value)}
+                      placeholder="06 XX XX XX XX"
+                      className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      {lang === 'ar' ? 'المدينة' : lang === 'fr' ? 'Ville' : 'City'}
+                    </label>
+                    <input
+                      value={customerCity}
+                      onChange={e => setCustomerCity(e.target.value)}
+                      placeholder={lang === 'ar' ? 'طنجة' : 'Tanger'}
+                      className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      {lang === 'ar' ? 'ملاحظات إضافية' : lang === 'fr' ? 'Notes' : 'Notes'}
+                    </label>
+                    <textarea
+                      rows="2"
+                      value={customerNotes}
+                      onChange={e => setCustomerNotes(e.target.value)}
+                      placeholder={lang === 'ar' ? 'أي تفاصيل إضافية...' : 'Any additional details...'}
+                      className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={orderLoading}
+                    className="w-full py-3.5 bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.121.554 4.11 1.522 5.84L.057 23.71a.5.5 0 00.609.61l5.941-1.554A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.88 0-3.63-.49-5.15-1.34l-.36-.21-3.73.977.996-3.643-.232-.374A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+                    </svg>
+                    {orderLoading
+                      ? (lang === 'ar' ? 'جاري الإرسال...' : 'Envoi...')
+                      : (lang === 'ar' ? 'تأكيد وإرسال عبر الواتساب' : lang === 'fr' ? 'Confirmer via WhatsApp' : 'Confirm via WhatsApp')}
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
