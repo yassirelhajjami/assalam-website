@@ -210,7 +210,7 @@ export default function Hero({ lang, scrollTo, setPage, banners = [], translatio
           {infoCards.map(({ icon: Icon, title, desc, color, bg }) => (
             <div
               key={title}
-              className="flex items-center gap-3 p-3 rounded-xl bg-white"
+              className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 transition-colors duration-205"
               style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
             >
               <div
@@ -220,8 +220,8 @@ export default function Hero({ lang, scrollTo, setPage, banners = [], translatio
                 <Icon className="w-5 h-5" style={{ color }} strokeWidth={2} />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-bold text-gray-800 leading-tight">{title}</p>
-                <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">{desc}</p>
+                <p className="text-xs font-bold text-gray-800 dark:text-gray-200 leading-tight">{title}</p>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5 leading-tight">{desc}</p>
               </div>
             </div>
           ))}
