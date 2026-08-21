@@ -212,7 +212,7 @@ export default function AdminServicesPage({ lang, setPage }) {
 
               <button
                 type="submit"
-                className="w-full mt-4 py-3.5 bg-indigo-750 hover:bg-indigo-800 text-white rounded-xl font-bold text-xs shadow-md transition-colors flex items-center justify-center gap-2"
+                className="w-full mt-4 py-3.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-xs shadow-md transition-colors flex items-center justify-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 {t.submitBtn}
