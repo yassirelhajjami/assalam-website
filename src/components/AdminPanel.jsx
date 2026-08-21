@@ -350,7 +350,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/desk.jpg',
+          image_url: '/images/products/desk.jpg',
           name_ar: 'طاولة مكتب',
           name_fr: 'Bureau de Travail',
           name_en: 'Work Desk',
@@ -366,7 +366,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/chair.jpg',
+          image_url: '/images/products/chair.jpg',
           name_ar: 'كرسي مكتبي',
           name_fr: 'Chaise de Bureau',
           name_en: 'Office Chair',
@@ -382,7 +382,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/cabinet.jpg',
+          image_url: '/images/products/cabinet.jpg',
           name_ar: 'خزانة تصنيف',
           name_fr: 'Armoire de Classement',
           name_en: 'Filing Cabinet',
@@ -398,7 +398,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/lamp.jpg',
+          image_url: '/images/products/lamp.jpg',
           name_ar: 'مصباح مكتبي LED',
           name_fr: 'Lampe de Bureau LED',
           name_en: 'LED Desk Lamp',
@@ -414,7 +414,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/shelf.jpg',
+          image_url: '/images/products/shelf.jpg',
           name_ar: 'رف كتب',
           name_fr: 'Étagère à Livres',
           name_en: 'Bookshelf',
@@ -430,7 +430,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'bureau',
           subcategory: '',
-          image_url: '/src/images/products/stand.jpg',
+          image_url: '/images/products/stand.jpg',
           name_ar: 'حامل متعدد الوظائف',
           name_fr: 'Support Multifonction',
           name_en: 'Multifunction Stand',
@@ -446,7 +446,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'pens',
-          image_url: '/src/images/products/pens.jpg',
+          image_url: '/images/products/pens.jpg',
           name_ar: 'قلم قابل للمسح SBC الأصلي',
           name_fr: 'Stylo effaçable original SBC',
           name_en: 'SBC Original Erasable Pen',
@@ -462,7 +462,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'notebooks',
-          image_url: '/src/images/products/paper.jpg',
+          image_url: '/images/products/paper.jpg',
           name_ar: 'دفتر جامعة عربي فاخر A4',
           name_fr: 'Cahier universitaire A4 luxe',
           name_en: 'Premium College Notebook A4',
@@ -478,7 +478,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'notebooks',
-          image_url: '/src/images/products/paper.jpg',
+          image_url: '/images/products/paper.jpg',
           name_ar: 'دفتر جامعة كرافت A5 - A4',
           name_fr: 'Cahier Kraft A5 - A4',
           name_en: 'Kraft College Notebook A5/A4',
@@ -494,7 +494,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'covers',
-          image_url: '/src/images/products/folder.jpg',
+          image_url: '/images/products/folder.jpg',
           name_ar: 'تجليد ذاتي اللصق SBC الأصلي',
           name_fr: 'Couvre livre adhésif SBC',
           name_en: 'SBC Self-Adhesive Book Cover',
@@ -510,7 +510,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'bags',
-          image_url: '/src/images/products/shelf.jpg',
+          image_url: '/images/products/shelf.jpg',
           name_ar: 'حقيبة مدرسية متكاملة للبنات',
           name_fr: 'Sac à dos complet filles',
           name_en: 'Complete School Bag Set Girl',
@@ -526,7 +526,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'bags',
-          image_url: '/src/images/products/folder.jpg',
+          image_url: '/images/products/folder.jpg',
           name_ar: 'حقيبة مدرسية متكاملة للأولاد',
           name_fr: 'Sac à dos complet garçons',
           name_en: 'Complete School Bag Set Boy',
@@ -542,7 +542,7 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         {
           category: 'papeterie',
           subcategory: 'colors',
-          image_url: '/src/images/products/pens.jpg',
+          image_url: '/images/products/pens.jpg',
           name_ar: 'ألوان خشبية SBC 24 لون',
           name_fr: 'Crayons de couleur SBC 24',
           name_en: 'SBC Colored Pencils 24 Pack',
@@ -570,12 +570,12 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
     setLoading(true);
     try {
       const bannersToSeed = [
-        { image_url: '/src/images/ourads/ad1.jpeg', display_order: 1 },
-        { image_url: '/src/images/ourads/ad2.jpeg', display_order: 2 },
-        { image_url: '/src/images/ourads/ad5.jpeg', display_order: 3 },
-        { image_url: '/src/images/ourads/ad6.jpeg', display_order: 4 },
-        { image_url: '/src/images/ourads/ad7.jpeg', display_order: 5 },
-        { image_url: '/src/images/ourads/ad8.jpeg', display_order: 6 }
+        { image_url: '/images/ourads/ad1.jpeg', display_order: 1 },
+        { image_url: '/images/ourads/ad2.jpeg', display_order: 2 },
+        { image_url: '/images/ourads/ad5.jpeg', display_order: 3 },
+        { image_url: '/images/ourads/ad6.jpeg', display_order: 4 },
+        { image_url: '/images/ourads/ad7.jpeg', display_order: 5 },
+        { image_url: '/images/ourads/ad8.jpeg', display_order: 6 }
       ];
       const { error } = await supabase.from('hero_banners').insert(bannersToSeed);
       if (error) throw error;
@@ -596,14 +596,14 @@ export default function AdminPanel({ lang, setPage, products, setProducts, banne
         { key: 'about.description', value_ar: 'مكتبة السلام متواجدة في طنجة، المغرب، تقدم لزبنائها الكتب والأدوات المدرسية والخدمات الإدارية.', value_fr: 'Située sur la Route Principale de Tanger, la Librairie Assalam est bien plus qu\'une simple librairie. C\'est un espace dédié à l\'éducation, à la culture et aux services de proximité.', value_en: 'Located on the Main Road of Tangier, Assalam Library is more than just a bookstore. It is a space dedicated to education, culture, and local community services.' },
         { key: 'about.image', value_ar: '/pic2.jpeg', value_fr: '/pic2.jpeg', value_en: '/pic2.jpeg' },
         { key: 'gallery.promo1.label', value_ar: 'أدوات مدرسية', value_fr: 'Fournitures Scolaires', value_en: 'School Supplies' },
-        { key: 'gallery.promo1.img', value_ar: '/src/images/ourads/ad3.jpeg', value_fr: '/src/images/ourads/ad3.jpeg', value_en: '/src/images/ourads/ad3.jpeg' },
+        { key: 'gallery.promo1.img', value_ar: '/images/ourads/ad3.jpeg', value_fr: '/images/ourads/ad3.jpeg', value_en: '/images/ourads/ad3.jpeg' },
         { key: 'gallery.promo2.label', value_ar: 'أثاث مكتبي', value_fr: 'Mobilier de Bureau', value_en: 'Office Furniture' },
-        { key: 'gallery.promo2.img', value_ar: '/src/images/ourads/ad4.jpeg', value_fr: '/src/images/ourads/ad4.jpeg', value_en: '/src/images/ourads/ad4.jpeg' },
+        { key: 'gallery.promo2.img', value_ar: '/images/ourads/ad4.jpeg', value_fr: '/images/ourads/ad4.jpeg', value_en: '/images/ourads/ad4.jpeg' },
         { key: 'gallery.promo3.label', value_ar: 'خدمات الطباعة', value_fr: 'Services Impression', value_en: 'Printing Services' },
-        { key: 'gallery.promo3.img', value_ar: '/src/images/ourads/ad8.jpeg', value_fr: '/src/images/ourads/ad8.jpeg', value_en: '/src/images/ourads/ad8.jpeg' },
-        { key: 'gallery.mini1.img', value_ar: '/src/images/ourads/ad9.jpeg', value_fr: '/src/images/ourads/ad9.jpeg', value_en: '/src/images/ourads/ad9.jpeg' },
-        { key: 'gallery.mini2.img', value_ar: '/src/images/ourads/ad10.jpeg', value_fr: '/src/images/ourads/ad10.jpeg', value_en: '/src/images/ourads/ad10.jpeg' },
-        { key: 'gallery.mini3.img', value_ar: '/src/images/ourads/ad11.jpeg', value_fr: '/src/images/ourads/ad11.jpeg', value_en: '/src/images/ourads/ad11.jpeg' }
+        { key: 'gallery.promo3.img', value_ar: '/images/ourads/ad8.jpeg', value_fr: '/images/ourads/ad8.jpeg', value_en: '/images/ourads/ad8.jpeg' },
+        { key: 'gallery.mini1.img', value_ar: '/images/ourads/ad9.jpeg', value_fr: '/images/ourads/ad9.jpeg', value_en: '/images/ourads/ad9.jpeg' },
+        { key: 'gallery.mini2.img', value_ar: '/images/ourads/ad10.jpeg', value_fr: '/images/ourads/ad10.jpeg', value_en: '/images/ourads/ad10.jpeg' },
+        { key: 'gallery.mini3.img', value_ar: '/images/ourads/ad11.jpeg', value_fr: '/images/ourads/ad11.jpeg', value_en: '/images/ourads/ad11.jpeg' }
       ];
       const { error } = await supabase.from('website_settings').upsert(settingsToSeed);
       if (error) throw error;
