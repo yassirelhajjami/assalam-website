@@ -63,18 +63,20 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
     window.scrollTo(0,0);
   };
 
-  const handleCategorySelect = (key) => {
+  const handleCategorySelect = (catKey) => {
     setOpen(false);
-    if (key === 'print') {
+    if (catKey === 'print') {
       setPage('print-services');
-      window.scrollTo(0,0);
-    } else if (key === 'admin') {
+      window.scrollTo(0, 0);
+    } else if (catKey === 'admin') {
       setPage('admin-services');
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     } else {
-      if (setStoreCat) setStoreCat(key);
-      setPage('store');
-      window.scrollTo(0,0);
+      // Always update storeCat so the Store's useEffect syncs the filter
+      // even when already on the store page
+      if (setStoreCat) setStoreCat(catKey);
+      if (page !== 'store') setPage('store');
+      window.scrollTo(0, 0);
     }
   };
 

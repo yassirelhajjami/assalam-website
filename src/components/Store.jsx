@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Phone, ShoppingBag, Trash2, Plus, Minus, X,
   Heart, Eye, Star, Filter, ChevronDown, ArrowRight, ShoppingCart
@@ -220,6 +220,13 @@ export default function Store({
   const [cat, setCat] = useState(initialCat);
   const [subcat, setSubcat] = useState('all');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Sync category when navbar/parent changes the initialCat prop
+  useEffect(() => {
+    setCat(initialCat);
+    setSubcat('all');
+    window.scrollTo(0, 0);
+  }, [initialCat]);
 
   const c = CONTENT[lang];
 
