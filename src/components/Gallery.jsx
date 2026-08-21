@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, ArrowRight, X, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
 import ad3  from '../images/ourads/ad3.jpeg';
 import ad4  from '../images/ourads/ad4.jpeg';
 import ad8  from '../images/ourads/ad8.jpeg';
@@ -15,6 +16,8 @@ const PROMO_BANNERS = [
 const MINI_ADS = [ad9, ad10, ad11];
 
 export default function Gallery({ lang, setPage, translations: propTranslations }) {
+  const [previewIdx, setPreviewIdx] = useState(null);
+
   const headings = {
     ar: 'معرض أعمالنا وعروضنا',
     fr: 'Notre Galerie & Promotions',
@@ -35,6 +38,34 @@ export default function Gallery({ lang, setPage, translations: propTranslations 
     return propTranslations?.[lang]?.gallery?.[key]?.img || img;
   });
 
+  // Combine all images for unified lightbox navigation
+  const galleryItems = [
+    ...activePromoBanners.map(b => ({ img: b.img, label: b.label, hasStoreLink: true })),
+    ...activeMiniAds.map((img, idx) => ({
+      img,
+      label: lang === 'ar' ? `عرض خاص ${idx + 1}` : lang === 'fr' ? `Offre Spéciale ${idx + 1}` : `Special Offer ${idx + 1}`,
+      hasStoreLink: true
+    }))
+  ];
+
+  const openPreview = (index) => {
+    setPreviewIdx(index);
+  };
+
+  const closePreview = () => {
+    setPreviewIdx(null);
+  };
+
+  const showPrev = (e) => {
+    e.stopPropagation();
+    setPreviewIdx(prev => (prev === 0 ? galleryItems.length - 1 : prev - 1));
+  };
+
+  const showNext = (e) => {
+    e.stopPropagation();
+    setPreviewIdx(prev => (prev === galleryItems.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <section id="gallery" className="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -51,9 +82,8 @@ export default function Gallery({ lang, setPage, translations: propTranslations 
           {activePromoBanners.map(({ img, label }, idx) => (
             <div
               key={idx}
-              className="relative rounded-2xl overflow-hidden group cursor-pointer border border-transparent dark:border-gray-800"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
-              onClick={() => setPage('store')}
+              className="relative rounded-2xl overflow-hidden group cursor-pointer border border-transparent dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300"
+              onClick={() => openPreview(idx)}
             >
               <img
                 src={img}
@@ -83,9 +113,8 @@ export default function Gallery({ lang, setPage, translations: propTranslations 
           {activeMiniAds.map((img, idx) => (
             <div
               key={idx}
-              className="rounded-xl overflow-hidden cursor-pointer group border border-transparent dark:border-gray-800"
-              style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.04)' }}
-              onClick={() => setPage('store')}
+              className="rounded-xl overflow-hidden cursor-pointer group border border-transparent dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300"
+              onClick={() => openPreview(activePromoBanners.length + idx)}
             >
               <img
                 src={img}
@@ -97,6 +126,74 @@ export default function Gallery({ lang, setPage, translations: propTranslations 
         </div>
 
       </div>
+
+      {/* ── Image Lightbox Modal ── */}
+      {previewIdx !== null && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none animate-fade-in"
+          onClick={closePreview}
+        >
+          {/* Close button */}
+          <button 
+            className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-[110]"
+            onClick={closePreview}
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Navigation controls */}
+          <button 
+            className="absolute left-4 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-[110] hidden md:block"
+            onClick={showPrev}
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button 
+            className="absolute right-4 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-[110] hidden md:block"
+            onClick={showNext}
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Lightbox Content Container */}
+          <div 
+            className="relative max-w-4xl w-full max-h-[85vh] flex flex-col items-center justify-center gap-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Image */}
+            <img 
+              src={galleryItems[previewIdx].img} 
+              alt={galleryItems[previewIdx].label} 
+              className="max-w-full max-h-[70vh] object-contain rounded-xl shadow-2xl border border-white/10 animate-scale-up"
+            />
+
+            {/* Label and Actions */}
+            <div className="w-full max-w-lg text-center px-4">
+              <p className="text-white font-bold text-lg mb-3 drop-shadow-md">{galleryItems[previewIdx].label}</p>
+              
+              {galleryItems[previewIdx].hasStoreLink && (
+                <button
+                  onClick={() => {
+                    closePreview();
+                    setPage('store');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="mx-auto flex items-center gap-2 px-6 py-2.5 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-sm font-bold shadow-lg transition-all"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  {lang === 'ar' ? 'تصفح المتجر' : lang === 'fr' ? 'Visiter la boutique' : 'Browse Store'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Swipe helper on mobile */}
+          <div className="absolute bottom-6 text-white/50 text-xs md:hidden">
+            {lang === 'ar' ? 'انقر خارج الصورة للإغلاق' : lang === 'fr' ? 'Cliquez en dehors pour fermer' : 'Click outside to close'}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+
