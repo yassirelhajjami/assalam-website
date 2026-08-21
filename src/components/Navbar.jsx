@@ -187,10 +187,10 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
       {/* ── Second Row: Category Navigation ── */}
       <nav className="hidden md:flex items-center justify-center h-11 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
         <div className="flex items-center gap-0">
-          {categories.map(({ key, label }) => (
+          {categories.map(({ key: catKey, label }) => (
             <button
-              key={key}
-              onClick={() => handleCategorySelect(key)}
+              key={catKey}
+              onClick={() => handleCategorySelect(catKey)}
               className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50 dark:hover:bg-gray-800 transition-colors whitespace-nowrap relative group"
             >
               {label}
@@ -214,10 +214,10 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             
             {/* Category links in a 2-column grid */}
             <div className="grid grid-cols-2 gap-2">
-              {categories.map(({ key, label }) => (
+              {categories.map(({ key: catKey, label }) => (
                 <button
-                  key={key}
-                  onClick={() => handleCategorySelect(key)}
+                  key={catKey}
+                  onClick={() => handleCategorySelect(catKey)}
                   className="flex items-center justify-center text-center py-2.5 px-3 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-gray-700 rounded-xl transition-all text-xs border border-transparent dark:border-gray-850"
                 >
                   {label}

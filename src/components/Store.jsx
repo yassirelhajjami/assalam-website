@@ -345,22 +345,22 @@ export default function Store({
         {/* ── Filter tabs + count ── */}
         <div className="flex flex-col gap-3 mb-6">
           <div className="flex flex-wrap items-center gap-2">
-            {CATS.map(({ key, label }) => (
+            {CATS.map(({ key: catKey, label }) => (
               <button
-                key={key}
+                key={catKey}
                 onClick={() => {
-                  if (key === 'print') { setPage('print-services'); }
-                  else if (key === 'admin') { setPage('admin-services'); }
-                  else { changeCategory(key); }
+                  if (catKey === 'print') { setPage('print-services'); }
+                  else if (catKey === 'admin') { setPage('admin-services'); }
+                  else { changeCategory(catKey); }
                 }}
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
-                  cat === key
+                  cat === catKey
                     ? 'bg-teal-700 text-white border-teal-700 shadow-sm'
                     : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-teal-400 hover:text-teal-700'
                 }`}
               >
                 {label}
-                {key === 'all' && (
+                {catKey === 'all' && (
                   <span className="mr-1.5 text-xs opacity-70">({all.length})</span>
                 )}
               </button>
@@ -376,12 +376,12 @@ export default function Store({
               className="flex gap-2 overflow-x-auto pb-2 no-scrollbar"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {subcats.map(({ key, label }) => (
+              {subcats.map(({ key: subKey, label }) => (
                 <button
-                  key={key}
-                  onClick={() => setSubcat(key)}
+                  key={subKey}
+                  onClick={() => setSubcat(subKey)}
                   className={`px-4 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap transition-all ${
-                    subcat === key
+                    subcat === subKey
                       ? 'bg-teal-50 dark:bg-teal-950/30 border-teal-700 text-teal-800 dark:text-teal-400 font-bold'
                       : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-teal-400 hover:text-teal-700'
                   }`}
