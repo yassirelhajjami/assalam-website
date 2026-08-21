@@ -190,7 +190,7 @@ export default function AdminServicesPage({ lang, setPage }) {
                 <select
                   value={requestType}
                   onChange={(e) => setRequestType(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-955 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none"
+                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none focus:border-indigo-400 dark:focus:border-indigo-500 transition-colors"
                 >
                   <option value="request">{lang === 'ar' ? 'كتابة طلب خطي / شكاية' : 'Lettre administrative / Plainte'}</option>
                   <option value="appointment">{lang === 'ar' ? 'حجز موعد إلكتروني' : 'Prise de rendez-vous'}</option>
@@ -206,7 +206,7 @@ export default function AdminServicesPage({ lang, setPage }) {
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder={t.formDescPlaceholder}
-                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-955 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none resize-none"
+                  className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-indigo-400 dark:focus:border-indigo-500 transition-colors resize-none"
                 />
               </div>
 

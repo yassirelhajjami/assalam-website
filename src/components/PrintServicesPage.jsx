@@ -242,7 +242,7 @@ export default function PrintServicesPage({ lang, setPage, translations }) {
                     required
                     value={numCopies}
                     onChange={(e) => setNumCopies(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none"
+                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
                   />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ export default function PrintServicesPage({ lang, setPage, translations }) {
                   <select
                     value={colorMode}
                     onChange={(e) => setColorMode(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-955 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none"
+                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
                   >
                     <option value="bw">{lang === 'ar' ? 'أسود وأبيض' : 'Noir & Blanc'}</option>
                     <option value="color">{lang === 'ar' ? 'ملون' : 'Couleur'}</option>
@@ -264,7 +264,7 @@ export default function PrintServicesPage({ lang, setPage, translations }) {
                   <select
                     value={paperSize}
                     onChange={(e) => setPaperSize(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-955 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none"
+                    className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl text-sm focus:outline-none focus:border-teal-500 transition-colors"
                   >
                     <option value="a4">A4</option>
                     <option value="a3">A3</option>
