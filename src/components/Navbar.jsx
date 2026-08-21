@@ -161,7 +161,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
             <button
               id="nav-menu-btn"
               onClick={() => setOpen(o => !o)}
-              className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
+              className="md:hidden flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -201,6 +201,7 @@ export default function Navbar({ lang, setLang, scrolled, scrollTo, page, setPag
           ))}
           <a
             href="tel:0699165490"
+            dir="ltr"
             className="mr-4 flex items-center gap-1.5 px-4 py-1.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-full transition-colors whitespace-nowrap"
           >
             <Phone className="w-3.5 h-3.5" />

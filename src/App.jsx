@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ShoppingBag } from 'lucide-react';
 import Navbar             from './components/Navbar';
 import Hero               from './components/Hero';
 import CategoryIcons      from './components/CategoryIcons';
@@ -174,6 +175,20 @@ const App = () => {
           darkMode={darkMode} setDarkMode={setDarkMode}
           translations={activeTranslations}
         />
+      )}
+
+      {/* ── Floating Cart Button (visible on service pages when cart has items) ── */}
+      {page !== 'admin' && page !== 'store' && cart.length > 0 && (
+        <button
+          onClick={() => { setPage('store'); window.scrollTo(0, 0); }}
+          dir="ltr"
+          className="fixed bottom-6 left-6 z-50 flex items-center gap-2 px-4 py-3 bg-teal-700 hover:bg-teal-800 text-white rounded-2xl shadow-xl font-bold text-sm transition-all animate-bounce-once"
+        >
+          <ShoppingBag className="w-5 h-5" />
+          <span className="min-w-[20px] h-5 bg-white text-teal-700 text-[11px] font-bold rounded-full flex items-center justify-center px-1">
+            {cart.reduce((sum, i) => sum + i.quantity, 0)}
+          </span>
+        </button>
       )}
 
       {page === 'admin' ? (
