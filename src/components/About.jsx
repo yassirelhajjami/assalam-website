@@ -2,8 +2,10 @@ import { CheckCircle } from 'lucide-react';
 import { translations } from '../data/translations';
 import pic2 from '../../pic2.jpeg';
 
-export default function About({ lang }) {
-  const t = translations[lang].about;
+export default function About({ lang, translations: propTranslations }) {
+  const activeT = propTranslations || translations;
+  const t = activeT[lang].about;
+  const aboutImage = t.image || pic2;
 
   const stats = [
     { value: t.stat1?.number || '10+', label: t.stat1?.label || '' },
@@ -31,7 +33,7 @@ export default function About({ lang }) {
           {/* Image with stats overlay */}
           <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
             <img
-              src={pic2}
+              src={aboutImage}
               alt="Librairie Assalam"
               className="w-full h-80 lg:h-[420px] object-cover"
             />

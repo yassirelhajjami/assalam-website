@@ -104,11 +104,15 @@ const getInfoCards = (lang) => ({
   ],
 })[lang] || [];
 
-export default function Hero({ lang, scrollTo, setPage }) {
+export default function Hero({ lang, scrollTo, setPage, banners = [], translations: propTranslations }) {
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timerRef = useRef(null);
   const infoCards = getInfoCards(lang);
+
+  const activeBanners = banners && banners.length > 0
+    ? banners
+    : BANNERS.map(url => ({ image_url: url }));
 
   const headings = {
     ar: { main: 'وجهتك الأولى للمستلزمات المكتبية والمدرسية', sub: 'مكتبة وراقة السلام — طنجة' },
@@ -116,7 +120,10 @@ export default function Hero({ lang, scrollTo, setPage }) {
     en: { main: 'Your destination for stationery and office supplies', sub: 'Assalam Library — Tangier' },
   };
 
-  const { main, sub } = headings[lang] || headings.ar;
+  const heroTitle = propTranslations?.[lang]?.hero?.title || headings[lang].main;
+  const heroSubtitle = propTranslations?.[lang]?.hero?.subtitle || headings[lang].sub;
+  const mainTitle = activeBanners[current]?.[`title_${lang}`] || heroTitle;
+  const subTitle = activeBanners[current]?.[`subtitle_${lang}`] || heroSubtitle;
 
   const goTo = (idx) => {
     if (isTransitioning) return;
@@ -127,13 +134,13 @@ export default function Hero({ lang, scrollTo, setPage }) {
     }, 200);
   };
 
-  const prev = () => goTo((current - 1 + BANNERS.length) % BANNERS.length);
-  const next = () => goTo((current + 1) % BANNERS.length);
+  const prev = () => goTo((current - 1 + activeBanners.length) % activeBanners.length);
+  const next = () => goTo((current + 1) % activeBanners.length);
 
   useEffect(() => {
     timerRef.current = setInterval(next, 4500);
     return () => clearInterval(timerRef.current);
-  }, [current]);
+  }, [current, activeBanners.length]);
 
   return (
     <section id="hero" className="pt-[90px] md:pt-[100px]">
@@ -146,7 +153,7 @@ export default function Hero({ lang, scrollTo, setPage }) {
           style={{ opacity: isTransitioning ? 0 : 1 }}
         >
           <img
-            src={BANNERS[current]}
+            src={activeBanners[current]?.image_url}
             alt={`Banner ${current + 1}`}
             className="w-full object-cover object-center"
             style={{ maxHeight: '480px', width: '100%' }}
@@ -162,9 +169,9 @@ export default function Hero({ lang, scrollTo, setPage }) {
         {/* Tagline overlay */}
         <div className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-1 pointer-events-none hidden sm:flex">
           <p className="text-white text-xl md:text-3xl font-bold text-center drop-shadow-lg px-4">
-            {main}
+            {mainTitle}
           </p>
-          <p className="text-white/80 text-sm font-medium">{sub}</p>
+          <p className="text-white/80 text-sm font-medium">{subTitle}</p>
         </div>
 
         {/* Prev/Next arrows */}
@@ -183,7 +190,7 @@ export default function Hero({ lang, scrollTo, setPage }) {
 
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 bg-black/35 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
-          {BANNERS.map((_, idx) => (
+          {activeBanners.map((_, idx) => (
             <button
               key={idx}
               onClick={() => goTo(idx)}

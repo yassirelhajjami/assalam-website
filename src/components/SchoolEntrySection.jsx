@@ -60,9 +60,31 @@ function Stars({ rating }) {
   );
 }
 
-export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart = [] }) {
-  const t = TEXTS[lang] || TEXTS.ar;
-  const products = SCHOOL_PRODUCTS[lang] || SCHOOL_PRODUCTS.ar;
+export default function SchoolEntrySection({ lang, onCtaClick, addToCart, cart = [], translations: propTranslations, dbProducts = [] }) {
+  const localSchool = propTranslations?.[lang]?.school || {};
+  const t = {
+    ...(TEXTS[lang] || TEXTS.ar),
+    title: localSchool.title || (TEXTS[lang] || TEXTS.ar).title,
+    desc: localSchool.desc || (TEXTS[lang] || TEXTS.ar).desc,
+    cta: localSchool.cta || (TEXTS[lang] || TEXTS.ar).cta,
+    added: propTranslations?.[lang]?.cart?.added || (TEXTS[lang] || TEXTS.ar).added,
+    add: propTranslations?.[lang]?.cart?.add || (TEXTS[lang] || TEXTS.ar).add,
+  };
+
+  const dbSchoolProducts = dbProducts && dbProducts.length > 0
+    ? dbProducts
+        .filter(p => p.category === 'papeterie')
+        .map(p => ({
+          id: p.id,
+          img: p.image_url,
+          name: p[`name_${lang}`] || p.name_fr,
+          price: p[`price_${lang}`] || p.price_fr,
+          priceNum: p.price_num,
+          rating: p.rating || 5
+        }))
+    : [];
+
+  const products = dbSchoolProducts.length > 0 ? dbSchoolProducts : (SCHOOL_PRODUCTS[lang] || SCHOOL_PRODUCTS.ar);
   const [wishlist, setWishlist] = useState({});
   const [addedIds, setAddedIds] = useState({});
 

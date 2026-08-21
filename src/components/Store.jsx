@@ -105,11 +105,16 @@ const CONTENT = {
 };
 
 /* ── Product Card ── */
-function ProductCard({ product, lang, addToCart, cartItem }) {
+function ProductCard({ product, lang, addToCart, cartItem, translations: propTranslations }) {
   const [wishlist, setWishlist] = useState(false);
   const [flashAdded, setFlashAdded] = useState(false);
   const quantity = cartItem ? cartItem.quantity : 0;
-  const c = CONTENT[lang];
+  
+  const localCart = propTranslations?.[lang]?.cart || {};
+  const c = {
+    ...CONTENT[lang],
+    addedLabel: localCart.added || CONTENT[lang].addedLabel,
+  };
 
   const handleAdd = () => {
     addToCart(product.id);
@@ -192,7 +197,7 @@ function ProductCard({ product, lang, addToCart, cartItem }) {
           }`}
         >
           <ShoppingCart className="w-4 h-4" />
-          {flashAdded ? c.addedLabel : (lang === 'ar' ? 'أضف إلى السلة' : lang === 'fr' ? 'Ajouter au panier' : 'Add to cart')}
+          {flashAdded ? c.addedLabel : (localCart.add || (lang === 'ar' ? 'أضف إلى السلة' : lang === 'fr' ? 'Ajouter au panier' : 'Add to cart'))}
         </button>
       </div>
     </div>
@@ -208,15 +213,31 @@ export default function Store({
   removeFromCart,
   updateCartQuantity,
   clearCart,
-  initialCat = 'all'
+  initialCat = 'all',
+  translations: propTranslations,
+  dbProducts = []
 }) {
   const [cat, setCat] = useState(initialCat);
   const [subcat, setSubcat] = useState('all');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const c = CONTENT[lang];
-  const all = PRODUCTS_DATA[lang];
-  const tCart = translations[lang].cart;
+
+  const all = dbProducts && dbProducts.length > 0
+    ? dbProducts.map(p => ({
+        id: p.id,
+        cat: p.category,
+        sub: p.subcategory || '',
+        img: p.image_url,
+        name: p[`name_${lang}`] || p.name_fr,
+        desc: p[`desc_${lang}`] || p.desc_fr || '',
+        price: p[`price_${lang}`] || p.price_fr,
+        priceNum: p.price_num,
+        rating: p.rating || 5
+      }))
+    : PRODUCTS_DATA[lang];
+
+  const tCart = propTranslations?.[lang]?.cart || translations[lang].cart;
 
   const filtered = cat === 'all'
     ? all
@@ -376,6 +397,7 @@ export default function Store({
               lang={lang}
               addToCart={addToCart}
               cartItem={cart.find(i => i.id === product.id)}
+              translations={propTranslations}
             />
           ))}
         </div>

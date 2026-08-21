@@ -9,13 +9,77 @@ import Gallery            from './components/Gallery';
 import Contact            from './components/Contact';
 import Footer             from './components/Footer';
 import Store              from './components/Store';
+import AdminPanel         from './components/AdminPanel';
+import { supabase }      from './supabaseClient';
+import { translations }  from './data/translations';
 
 const App = () => {
   const [lang, setLang]         = useState('ar');
   const [scrolled, setScrolled] = useState(false);
-  const [page, setPage]         = useState('home');
+  const [page, setPage]         = useState(() => {
+    return window.location.pathname === '/assalam-admin' ? 'admin' : 'home';
+  });
   const [storeCat, setStoreCat] = useState('all');
   
+  // Database content states
+  const [dbProducts, setDbProducts] = useState([]);
+  const [dbBanners, setDbBanners] = useState([]);
+  const [dbSettings, setDbSettings] = useState([]);
+  const [activeTranslations, setActiveTranslations] = useState(translations);
+
+  // Fetch from Supabase
+  const loadData = async () => {
+    try {
+      const { data: pData } = await supabase.from('products').select('*').order('id', { ascending: true });
+      if (pData && pData.length > 0) setDbProducts(pData);
+
+      const { data: bData } = await supabase.from('hero_banners').select('*').order('display_order', { ascending: true });
+      if (bData && bData.length > 0) setDbBanners(bData);
+
+      const { data: sData } = await supabase.from('website_settings').select('*');
+      if (sData) {
+        setDbSettings(sData);
+        // Merge overrides
+        const merged = JSON.parse(JSON.stringify(translations));
+        sData.forEach(setting => {
+          const parts = setting.key.split('.');
+          ['ar', 'fr', 'en'].forEach(l => {
+            if (!merged[l]) return;
+            let curr = merged[l];
+            for (let i = 0; i < parts.length - 1; i++) {
+              if (!curr[parts[i]]) curr[parts[i]] = {};
+              curr = curr[parts[i]];
+            }
+            const lastKey = parts[parts.length - 1];
+            const valField = `value_${l}`;
+            if (setting[valField]) {
+              curr[lastKey] = setting[valField];
+            }
+          });
+        });
+        setActiveTranslations(merged);
+      }
+    } catch (err) {
+      console.warn("Supabase fetch error. Using local mock fallbacks:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (page === 'admin') {
+      if (window.location.pathname !== '/assalam-admin') {
+        window.history.pushState({}, '', '/assalam-admin');
+      }
+    } else {
+      if (window.location.pathname === '/assalam-admin') {
+        window.history.pushState({}, '', '/');
+      }
+    }
+  }, [page]);
+
   // Theme State
   const [darkMode, setDarkMode] = useState(() => {
     try {
@@ -91,16 +155,28 @@ const App = () => {
 
   return (
     <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="font-arabic text-gray-800 dark:text-gray-100 transition-colors duration-205">
-      <Navbar
-        lang={lang} setLang={setLang}
-        scrolled={scrolled} scrollTo={scrollTo}
-        page={page} setPage={setPage}
-        cart={cart}
-        setStoreCat={setStoreCat}
-        darkMode={darkMode} setDarkMode={setDarkMode}
-      />
+      {page !== 'admin' && (
+        <Navbar
+          lang={lang} setLang={setLang}
+          scrolled={scrolled} scrollTo={scrollTo}
+          page={page} setPage={setPage}
+          cart={cart}
+          setStoreCat={setStoreCat}
+          darkMode={darkMode} setDarkMode={setDarkMode}
+          translations={activeTranslations}
+        />
+      )}
 
-      {page === 'store' ? (
+      {page === 'admin' ? (
+        <AdminPanel
+          lang={lang}
+          setPage={setPage}
+          products={dbProducts}
+          banners={dbBanners}
+          customSettings={dbSettings}
+          reloadData={loadData}
+        />
+      ) : page === 'store' ? (
         <Store
           lang={lang}
           setPage={setPage}
@@ -111,22 +187,26 @@ const App = () => {
           clearCart={clearCart}
           initialCat={storeCat}
           darkMode={darkMode}
+          translations={activeTranslations}
+          dbProducts={dbProducts}
         />
       ) : (
         <>
-          <Hero lang={lang} scrollTo={scrollTo} setPage={setPage} />
+          <Hero lang={lang} scrollTo={scrollTo} setPage={setPage} banners={dbBanners} translations={activeTranslations} />
           <CategoryIcons lang={lang} onCategoryClick={(catKey) => { setStoreCat(catKey); setPage('store'); window.scrollTo(0,0); }} />
           <SchoolEntrySection 
             lang={lang} 
             onCtaClick={() => { setStoreCat('papeterie'); setPage('store'); window.scrollTo(0,0); }} 
             addToCart={addToCart}
             cart={cart}
+            translations={activeTranslations}
+            dbProducts={dbProducts}
           />
-          <Services lang={lang} />
-          <About    lang={lang} />
-          <Gallery  lang={lang} setPage={setPage} />
-          <Contact  lang={lang} />
-          <Footer   lang={lang} scrollTo={scrollTo} setPage={setPage} />
+          <Services lang={lang} translations={activeTranslations} />
+          <About    lang={lang} translations={activeTranslations} />
+          <Gallery  lang={lang} setPage={setPage} translations={activeTranslations} />
+          <Contact  lang={lang} translations={activeTranslations} />
+          <Footer   lang={lang} scrollTo={scrollTo} setPage={setPage} translations={activeTranslations} />
         </>
       )}
     </div>

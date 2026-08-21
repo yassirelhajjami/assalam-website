@@ -2,8 +2,8 @@ import { MapPin, Phone, Clock, Instagram, Facebook, Youtube, Heart } from 'lucid
 import { translations } from '../data/translations';
 import logoImg from '../../pic1.png';
 
-export default function Footer({ lang }) {
-  const t = translations[lang].footer;
+export default function Footer({ lang, setPage, translations: propTranslations }) {
+  const t = propTranslations?.[lang]?.footer || translations[lang].footer;
 
   const navLinks = {
     ar: [

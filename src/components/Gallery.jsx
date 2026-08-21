@@ -14,12 +14,26 @@ const PROMO_BANNERS = [
 
 const MINI_ADS = [ad9, ad10, ad11];
 
-export default function Gallery({ lang, setPage }) {
+export default function Gallery({ lang, setPage, translations: propTranslations }) {
   const headings = {
     ar: 'معرض أعمالنا وعروضنا',
     fr: 'Notre Galerie & Promotions',
     en: 'Our Gallery & Offers',
   };
+
+  const activePromoBanners = PROMO_BANNERS.map((banner, idx) => {
+    const key = `promo${idx + 1}`;
+    const local = propTranslations?.[lang]?.gallery?.[key] || {};
+    return {
+      img: local.img || banner.img,
+      label: local.label || banner.label[lang]
+    };
+  });
+
+  const activeMiniAds = MINI_ADS.map((img, idx) => {
+    const key = `mini${idx + 1}`;
+    return propTranslations?.[lang]?.gallery?.[key]?.img || img;
+  });
 
   return (
     <section id="gallery" className="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800/40">
@@ -34,7 +48,7 @@ export default function Gallery({ lang, setPage }) {
 
         {/* Large promo banners - 3-column grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-          {PROMO_BANNERS.map(({ img, label, cta }, idx) => (
+          {activePromoBanners.map(({ img, label }, idx) => (
             <div
               key={idx}
               className="relative rounded-2xl overflow-hidden group cursor-pointer border border-transparent dark:border-gray-800"
@@ -43,14 +57,14 @@ export default function Gallery({ lang, setPage }) {
             >
               <img
                 src={img}
-                alt={label[lang]}
+                alt={label}
                 className="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 group-hover:from-black/70" />
               <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
                 <div>
-                  <p className="text-white font-bold text-lg leading-tight">{label[lang]}</p>
+                  <p className="text-white font-bold text-lg leading-tight">{label}</p>
                 </div>
                 <div className="w-9 h-9 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition-all group-hover:bg-teal-700 group-hover:text-white">
                   {lang === 'ar' ? (
@@ -66,7 +80,7 @@ export default function Gallery({ lang, setPage }) {
 
         {/* Mini ads row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {MINI_ADS.map((img, idx) => (
+          {activeMiniAds.map((img, idx) => (
             <div
               key={idx}
               className="rounded-xl overflow-hidden cursor-pointer group border border-transparent dark:border-gray-800"
